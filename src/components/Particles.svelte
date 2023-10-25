@@ -4,6 +4,7 @@
 	import Particles from "svelte-particles";
 	import { loadFull } from "tsparticles";
     import { onDestroy, onMount } from "svelte";
+    import { scrollVelocity } from "$lib/stores";
 	type S = ISourceOptions;
 	let particlesConfig: S = {
 		background: {
@@ -15,7 +16,7 @@
 			},
 			move: {
 				enable: true,
-				speed: { min: 0.1, max: 1 },
+				speed: { min: 1, max: 1 },
 				
 			},
 			opacity: {
@@ -50,11 +51,10 @@
 			console.log({container})
 			return {
 				init() {},
-				isEnabled: (particleFromIsEnabled) => {
-					return true
-				},
-				move(particle, delta) {
-					// particle.velocity.y = particle.initialVelocity.y + speedMultiplier * scrollSpeed
+				isEnabled: () => true,
+				move(particle) {
+					const speedMultiplier = 2;
+					particle.velocity.y = particle.initialVelocity.y - speedMultiplier * $scrollVelocity;
 				},
 			}
 		})

@@ -1,6 +1,11 @@
-<h1>Big Heading</h1>
-<h2>Medium Heading</h2>
-<h3>Small Heading</h3>
-<div style="height: 300vh">
-	Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo voluptatibus exercitationem quia harum iusto expedita fuga! Cum, odit. Ipsa molestias debitis quisquam voluptas eos deserunt dolor numquam delectus eum quasi.
-</div>
+<script lang="ts">
+	import Hero from "../components/Hero.svelte";
+
+</script>
+
+<Hero />
+<!-- <Creations bind:work_section={$navElements["Our Work"]}></Creations>
+<Services bind:services_section={$navElements["Services"]}></Services>
+<AboutUs bind:about_section={$navElements["About Us"]}></AboutUs>
+<SoundSpace bind:soundspace_section={$soundspace_section}></SoundSpace>
+<ContactUs bind:contactsection={$navElements["Contact Us"]} /> -->

@@ -1,29 +1,27 @@
 <script lang="ts">
 	import Particles from "../components/Particles.svelte";
 	import Navbar from "../components/NavBar.svelte";
-	import gsap from "gsap-trial";
-	import ScrollTrigger from "gsap-trial/ScrollTrigger";
-	import ScrollSmoother from "gsap-trial/ScrollSmoother";
 	import { onMount } from "svelte";
+	import Lenis from "@studio-freight/lenis";
+	import { scrollVelocity } from "$lib/stores";
 
-	// @ts-ignore
-	gsap.config({ trialWarn: false });
-	gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+	const lenis = new Lenis();
 
-	onMount(() => {
-		ScrollSmoother.create({
-			effects: true,
-			smooth: 1,
-		});
+	lenis.on("scroll", (e: any) => {
+		console.log({ lenisEvent: e });
+		scrollVelocity.set(e.velocity);
 	});
+	function raf(time: number) {
+		lenis.raf(time);
+		requestAnimationFrame(raf);
+	}
+	requestAnimationFrame(raf);
+
+	onMount(() => {});
 </script>
 
 <Particles />
 <Navbar />
-<div id="smooth-wrapper">
-	<div id="smooth-content">
-		<main class="">
-			<slot />
-		</main>
-	</div>
-</div>
+<main class="">
+	<slot />
+</main>

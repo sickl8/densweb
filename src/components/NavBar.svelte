@@ -9,7 +9,7 @@
 	<nav class="w-[90%] max-w-4xl h-full">
 		<ul class="h-full w-full flex justify-between items-center">
 			<li class="h-full aspect-square flex justify-center items-center">
-				<a class="p-1 w-[70%] h-[70%]" href="/#">
+				<a class="p-1 w-[65%] h-[65%]" href="/#">
 					<Logo class="h-full w-full"/>
 				</a>
 			</li>

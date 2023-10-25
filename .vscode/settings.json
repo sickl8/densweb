@@ -1,0 +1,9 @@
+{
+	"vscode-color-picker.languages": [
+		"svelte",
+		"json"
+	],
+	"css.customData": [
+		".vscode/tailwind.json"
+	],
+}

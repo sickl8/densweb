@@ -5,8 +5,8 @@
 	import SideBar from "./SideBar.svelte";
 </script>
 
-<header class="w-full h-20 sticky top-0 flex flex-col items-center bg-gradient-to-b from-black/90 from-10% via-black/70 via-40% to-transparent to-100%">
-	<nav class="w-[90%] max-w-4xl h-full">
+<header class="w-full h-20 sticky z-10 top-0 flex flex-col items-center bg-gradient-to-b from-black/90 from-10% via-black/70 via-40% to-transparent to-100%">
+	<nav class="w-full max-w-[67.5rem] h-full">
 		<ul class="h-full w-full flex justify-between items-center">
 			<li class="h-full aspect-square flex justify-center items-center">
 				<a class="p-1 w-[65%] h-[65%]" href="/#">
@@ -20,7 +20,7 @@
 					</button>
 					<SideBar />
 				</div>
-				<div class="h-full w-full hidden sm:flex flex-col justify-center gap-0.5">
+				<div class="h-full w-full hidden sm:flex flex-col justify-center gap-0.5 px-4">
 					<div class="underscore h-0.5 w-full" style="" />
 					<ul class="flex justify-center items-center gap-8">
 						{#each $navData as el}

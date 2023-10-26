@@ -38,6 +38,7 @@
 		"audiomotion-analyzer": "^4.1.0",
 		"gsap": "^3.12.2",
 		"gsap-trial": "^3.12.2",
+		"motion": "^10.16.4",
 		"path-browserify": "^1.0.1",
 		"svelte-carousel": "^1.0.25",
 		"svelte-cubed": "^0.2.1",

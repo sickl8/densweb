@@ -8,7 +8,6 @@
 	const lenis = new Lenis();
 
 	lenis.on("scroll", (e: any) => {
-		console.log({ lenisEvent: e });
 		scrollVelocity.set(e.velocity);
 	});
 	function raf(time: number) {
@@ -22,6 +21,6 @@
 
 <Particles />
 <Navbar />
-<main class="">
+<main class="w-full h-full">
 	<slot />
 </main>

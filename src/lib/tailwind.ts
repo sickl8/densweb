@@ -1,7 +1,14 @@
 import type { RecursiveKeyValuePair } from "tailwindcss/types/config";
 import * as tColors from "tailwindcss/colors";
+import type { DefaultColors } from "tailwindcss/types/generated/colors";
 
 type TailwindColors = RecursiveKeyValuePair<string, string>;
+
+Object.keys(tColors).forEach((key) => {
+	if (key.match(/[a-z]+[A-Z][a-z]+/)) {
+		delete tColors[key as keyof DefaultColors];
+	}
+})
 
 export const colors = {
 	...tColors,

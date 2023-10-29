@@ -1,14 +1,16 @@
 <script lang="ts">
-	import Hero from "../components/home/Hero.svelte";
-
+	import Description from "src/components/home/Description.svelte";
+import Hero from "../components/home/Hero.svelte";
 </script>
 
-<section class="w-full min-h-[calc(100vmin-5rem)] px-2 flex flex-col items-center justify-center">
+<section class="w-full min-h-[calc(100svh-5rem)] px-2 flex flex-col items-center justify-center">
 	<Hero />
 </section>
-<section class="w-full min-h-[calc(100vmin-5rem)] px-2 flex flex-col items-center justify-center">
-	<!-- <Hero /> -->
-	<h2>Hello</h2>
+<section class="w-full --min-h-[calc(100svh-5rem)] px-2 flex flex-col items-center justify-center py-32">
+	<Description />
+</section>
+<section class="w-full min-h-[calc(100svh-5rem)] px-2 flex flex-col items-center justify-center">
+	
 </section>
 <!-- <Creations bind:work_section={$navElements["Our Work"]}></Creations>
 <Services bind:services_section={$navElements["Services"]}></Services>

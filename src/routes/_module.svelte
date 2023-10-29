@@ -5,7 +5,11 @@
 	import Lenis from "@studio-freight/lenis";
 	import { scrollVelocity } from "$lib/stores";
 
-	const lenis = new Lenis();
+	const lenis = new Lenis({
+		smoothTouch: true,
+		touchMultiplier: 4,
+		touchInertiaMultiplier: 0,
+	});
 
 	lenis.on("scroll", (e: any) => {
 		scrollVelocity.set(e.velocity);

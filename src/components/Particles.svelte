@@ -3,8 +3,8 @@
 	import { colors } from "$lib/tailwind";
 	import Particles from "svelte-particles";
 	import { loadFull } from "tsparticles";
-    import { onDestroy, onMount } from "svelte";
-    import { scrollVelocity } from "$lib/stores";
+	import { onMount } from "svelte";
+	import { scrollVelocity } from "$lib/stores";
 	type S = ISourceOptions;
 	let particlesConfig: S = {
 		background: {
@@ -40,15 +40,11 @@
 			},
 		},
 	};
-	let onParticlesLoaded = (event: Event) => {
-		console.log({event});
-	};
 	let particlesInit = async (engine: Engine) => {
 		await loadFull(engine)
 	};
 	onMount(() => {
 		tsParticles.addMover("myMover", (container) => {
-			console.log({container})
 			return {
 				init() {},
 				isEnabled: () => true,
@@ -65,6 +61,5 @@
 	id="particles"
 	class="-z-10 relative"
 	options={particlesConfig}
-	on:particlesLoaded={onParticlesLoaded}
 	{particlesInit}
 />

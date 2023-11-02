@@ -4,14 +4,10 @@ import type { DefaultColors } from "tailwindcss/types/generated/colors";
 
 type TailwindColors = RecursiveKeyValuePair<string, string>;
 
-Object.keys(tColors).forEach((key) => {
-	if (key.match(/[a-z]+[A-Z][a-z]+/)) {
-		delete tColors[key as keyof DefaultColors];
-	}
-})
-
 export const colors = {
-	...tColors,
+	...Object.keys(tColors)
+	.filter(key => !key.match(/[a-z]+[A-Z][a-z]+/))
+	.reduce((cur, key) => Object.assign(cur, {[key]: tColors[key as keyof DefaultColors]}), {}) as DefaultColors,
 	"torch-red": {
 		base: "hsla(352, 93%, 53%, 1)",
 		50: "hsla(352, 100%, 97%, 1)",

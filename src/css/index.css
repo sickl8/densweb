@@ -1,4 +1,5 @@
 @import "./normalize.css";
+@import "./lenis.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -66,4 +67,9 @@ h3 {
 
 ::-webkit-scrollbar-corner {
 	background: transparent;
+}
+
+@font-face {
+	font-family: DEN;
+	src: url("./asdfasdf.ttf");
 }

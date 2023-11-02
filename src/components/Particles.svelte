@@ -16,7 +16,7 @@
 			},
 			move: {
 				enable: true,
-				speed: { min: 0.5, max: 1 },
+				speed: { min: 1, max: 1 },
 				
 			},
 			opacity: {

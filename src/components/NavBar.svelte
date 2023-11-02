@@ -22,9 +22,9 @@
 				</div>
 				<div class="h-full w-full hidden sm:flex flex-col justify-center gap-0.5 px-4">
 					<div class="underscore h-0.5 w-full" style="" />
-					<ul class="flex justify-center items-center gap-8">
+					<ul class="-nav-list flex justify-center items-center gap-8">
 						{#each $navData as el}
-							<li class="lidots">
+							<li class="lidots transition-colors">
 								<a class="no-underline text-current" href={el.path + el.selector}>
 									{el.text}
 								</a>
@@ -39,12 +39,20 @@
 </header>
 
 <style lang="postcss">
-	.lidots {
-		&:first-child::marker {
-			content: none;
+	.-nav-list {
+		&:hover {
+			@apply text-white/50;
 		}
-		&::marker {
-			content: ".   ";
+		.lidots {
+			&:hover {
+				@apply text-white;
+			}
+			&:first-child::marker {
+				content: none;
+			}
+			&::marker {
+				content: ".   ";
+			}
 		}
 	}
 </style>

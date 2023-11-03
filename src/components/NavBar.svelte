@@ -1,8 +1,12 @@
 <script lang="ts">
 	import { navData, sideBarIsOn } from "$lib/stores";
+    import { onMount } from "svelte";
 	import BurgerMenu from "./BurgerMenu.svelte";
 	import Logo from "./Logo.svelte";
 	import SideBar from "./SideBar.svelte";
+	import gsap from "gsap-trial";
+    import { hover } from "$lib/hoverAction";
+
 </script>
 
 <header class="w-full h-20 sticky z-10 top-0 flex flex-col items-center bg-gradient-to-b from-black/90 from-10% via-black/70 via-40% to-transparent to-100%">
@@ -22,16 +26,18 @@
 				</div>
 				<div class="h-full w-full hidden sm:flex flex-col justify-center gap-0.5 px-4">
 					<div class="underscore h-0.5 w-full" style="" />
-					<ul class="-nav-list flex justify-center items-center gap-8">
+					<ul class="-nav-list hover:text-white/50 flex justify-center items-center">
 						{#each $navData as el}
-							<li class="lidots transition-colors">
-								<a class="no-underline text-current" href={el.path + el.selector}>
-									{el.text}
-								</a>
+							<li class="lidots group hover:text-white transition-colors pr-8 last:pr-0">
+									<a class="no-underline text-current" href={el.path + el.selector}>
+										{el.text}
+									</a>
+									<div class="-container flex w-12 translate-x-[1px] justify-end group-hover:justify-start">
+										<div class="-underscore h-0.5 w-0 group-hover:w-full bg-torch-red-base transition-all duration-300" style="" />
+									</div>
 							</li>
 						{/each}
 					</ul>
-					<div class="underscore h-0.5 w-8 bg-torch-red-base" style="" />
 				</div>
 			</li>
 		</ul>
@@ -40,13 +46,7 @@
 
 <style lang="postcss">
 	.-nav-list {
-		&:hover {
-			@apply text-white/50;
-		}
 		.lidots {
-			&:hover {
-				@apply text-white;
-			}
 			&:first-child::marker {
 				content: none;
 			}

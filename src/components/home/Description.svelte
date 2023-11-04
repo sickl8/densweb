@@ -1,8 +1,9 @@
 <script lang="ts">
+    import { hover } from "$lib/hoverAction";
 	import gsap from "gsap-trial";
 
 	function handleMouseEvent(event: MouseEvent | FocusEvent) {
-		const circleSizeInRems = 5;
+		const circleSizeInRems = 6;
 		const borderSizeInPxs = 2;
 		const remsToPixels = (rems: number) => {
 			return rems * parseFloat(getComputedStyle(document.documentElement).fontSize);
@@ -44,10 +45,7 @@
 
 <div id="desc" class="-container relative w-full max-w-5xl h-full flex flex-col justify-center items-center">
 	<h2 class="-white text-5xl font-semibold leading-[4rem] text-center before:inline-block before:-translate-x-12 before:leading-[0] before:text-8xl before:content-[open-quote] before:w-0 before:h-0 before:font-bold before:text-torch-red-base after:inline-block after:translate-y-20 after:leading-[0] after:text-8xl after:content-[close-quote] after:w-0 after:h-0 after:font-bold after:text-torch-red-base px-12 py-8"
-	on:mouseover={handleMouseEvent}
-	on:mousemove={handleMouseEvent}
-	on:focus={handleMouseEvent}
-	on:mouseleave={handleMouseEvent}>
+	use:hover={{callback: handleMouseEvent, listenToMouseMove: true}}>
 		DEN is a group of creative people from different industries gathered to
 		bring your most dreamy ideas into reality
 	</h2>

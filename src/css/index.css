@@ -17,6 +17,7 @@ html {
 
 body {
 	height: 100%;
+	overflow-x: hidden;
 }
 
 h1 {
@@ -46,6 +47,7 @@ h3 {
 	@apply bg-torch-red-base;
 	border: none;
 	border-radius: 50px;
+	display: none;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -59,6 +61,7 @@ h3 {
 ::-webkit-scrollbar-track {
 	@apply bg-black;
 	border: none;
+	display: none;
 }
 
 ::-webkit-scrollbar-track:hover {
@@ -67,6 +70,7 @@ h3 {
 
 ::-webkit-scrollbar-corner {
 	background: transparent;
+	display: none;
 }
 
 @font-face {

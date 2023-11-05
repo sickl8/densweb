@@ -1,15 +1,17 @@
 <script lang="ts">
 	import DashTitle from "../DashTitle.svelte";
+    import LogoWireframe from "../LogoWireframe.svelte";
     import Creations from "./Creations.svelte";
 	import Description from "./Description.svelte";
 	import Hero from "./Hero.svelte";
 
 </script>
 
-<section class="relative w-full min-h-[calc(100svh-5rem)] px-2 flex flex-col items-center justify-center">
+<section class="relative overflow-x-hidden overflow-y-visible w-full min-h-[calc(100svh-5rem)] px-2 flex flex-col items-center justify-center">
+	<!-- <LogoWireframe class="text-neutral-500/50 absolute left-[50%] top-[-15%] h-[150%] -z-10"/> -->
 	<Hero />
 </section>
-<section class="w-full --min-h-[calc(100svh-5rem)] px-2 flex flex-col items-center justify-center py-32">
+<section class="relative overflow-x-hidden w-full --min-h-[calc(100svh-5rem)] px-2 flex flex-col items-center justify-center py-32">
 	<Description />
 </section>
 <section class="w-full min-h-[calc(100svh-5rem)] px-2 flex flex-col items-center justify-start">

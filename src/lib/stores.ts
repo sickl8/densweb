@@ -1,3 +1,4 @@
+import Lenis from "@studio-freight/lenis";
 import { writable } from "svelte/store";
 
 export let sideBarIsOn = writable(false);
@@ -8,3 +9,4 @@ export let navData = writable([
 	{ text: "Contact Us", path: "/", selector: "#contact" },
 ]);
 export let scrollVelocity = writable(0);
+export let windowSmoothScroll = writable<Lenis>();

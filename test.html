@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<style>
+		body {
+			overflow: hidden;
+		}
+		* {
+			box-sizing: border-box;
+			margin: 0;
+		}
+		h1 {
+			/* font-size: 2em; */
+			/* width: 100%; */
+			/* padding-inline: 4rem;
+			padding-block: 3rem; */
+		}
+		.zoom {
+			/* font-size: 4em; */
+			/* width: 200%; */
+			/* padding-inline: 8rem;
+			padding-block: 6rem; */
+		}
+		.zoomc {
+			transform: scale(2) translateX(250px) translateY(100px);
+			width: 100%;
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+		.nozoomc {
+			position: relative;
+			width: 100%;
+		}
+		.w {
+			width: 50%;
+			padding-inline: 8rem;
+			padding-block: 6rem;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="w">
+		<div class="nozoomc container">
+			<h1 class="nozoom">
+				Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias, commodi?
+			</h1>
+			<div class="zoomc container">
+				<h1 class="zoom">
+					Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias, commodi?
+				</h1>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

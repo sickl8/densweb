@@ -7,21 +7,23 @@
 
 
 	onMount(() => {
-		const lenis = new Lenis({
-			// smoothTouch: true,
-			// touchMultiplier: 4,
-			// touchInertiaMultiplier: 0,
-		});
-		windowSmoothScroll.set(lenis);
-		lenis.on("scroll", (e: any) => {
-			console.log("v = " + e.velocity.toString());
-			scrollVelocity.set(e.velocity);
-		});
-		function raf(time: number) {
-			lenis.raf(time);
+		if ("ontouchstart" in window === false) {
+			const lenis = new Lenis({
+				// smoothTouch: true,
+				// touchMultiplier: 4,
+				// touchInertiaMultiplier: 0,
+			});
+			windowSmoothScroll.set(lenis);
+			lenis.on("scroll", (e: any) => {
+				// console.log("v = " + e.velocity.toString());
+				scrollVelocity.set(e.velocity);
+			});
+			function raf(time: number) {
+				lenis.raf(time);
+				requestAnimationFrame(raf);
+			}
 			requestAnimationFrame(raf);
 		}
-		requestAnimationFrame(raf);
 	});
 	let lastSet = performance.now();
 	let lastScrollY = 0;
@@ -31,7 +33,7 @@
 			let now = performance.now();
 			let velocity = now === lastSet ? 0 : (scrollY - lastScrollY) / (now - lastSet);
 			lastScrollY = scrollY;
-			console.log("v = " + velocity.toString());
+			// console.log("v = " + velocity.toString());
 			// scrollVelocity.set()
 			lastSet = performance.now();
 		}
@@ -42,6 +44,6 @@
 
 <Particles />
 <Navbar />
-<main class="w-full h-full">
+<main class="overflow-hidden w-full h-full">
 	<slot />
 </main>

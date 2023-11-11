@@ -91,7 +91,7 @@
 				// console.log({offsetMiddle, crct: offsetMiddle - (correction[0] || 0), minScroll, maxScroll, carouselScroll})
 				return { ...calc, offset: Math.abs(offsetMiddle - (correction[0] || 0)) };
 			})
-			let scaleData = [1, 0.75, 0.85, 0.85];
+			let scaleData = [1, 0.8, 0.8, 0.8];
 			let opacityData = [0, 1, 1, 1];
 			calcs.forEach(calc => {
 				let {offset, img, redImg, li} = calc;

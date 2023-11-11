@@ -37,6 +37,10 @@ h3 {
 	height: 7px;
 	display: none;
 }
+/* Firefox */
+* {
+	scrollbar-width: none;
+}
 
 ::-webkit-scrollbar-button {
 	width: 0px;

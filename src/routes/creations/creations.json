@@ -1,22 +1,5 @@
 [
 	{
-		"name": "balins",
-		"display_name": "Balins",
-		"img": "balins.webp",
-		"about_the_project": "Our success is that of our clients. We grow together through that of our client's crazy ideas and real business impact.",
-		"hero_img": "tv_balins.gif",
-		"about_img": "Balins_4.webp",
-		"sm_left_img": "balins_frame_1.webp",
-		"sm_middle_img": "balins_frame_2.webp",
-		"sm_right_img": "balins_frame_3.webp",
-		"banner_img": "Balins_8.webp",
-		"misc": ["<<TO_FILL>>", "..."],
-		"style": {
-			"color": "#fff98b",
-			"background-color": "#000000"
-		}
-	},
-	{
 		"name": "bunin",
 		"display_name": "Bunin",
 		"img": "bunin.webp",
@@ -47,6 +30,23 @@
 		"misc": ["<<TO_FILL>>", "..."],
 		"style": {
 			"color": "#ffffff",
+			"background-color": "#000000"
+		}
+	},
+	{
+		"name": "balins",
+		"display_name": "Balins",
+		"img": "balins.webp",
+		"about_the_project": "Our success is that of our clients. We grow together through that of our client's crazy ideas and real business impact.",
+		"hero_img": "tv_balins.gif",
+		"about_img": "Balins_4.webp",
+		"sm_left_img": "balins_frame_1.webp",
+		"sm_middle_img": "balins_frame_2.webp",
+		"sm_right_img": "balins_frame_3.webp",
+		"banner_img": "Balins_8.webp",
+		"misc": ["<<TO_FILL>>", "..."],
+		"style": {
+			"color": "#fff98b",
 			"background-color": "#000000"
 		}
 	}

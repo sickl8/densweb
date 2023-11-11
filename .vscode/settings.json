@@ -1,7 +1,8 @@
 {
 	"vscode-color-picker.languages": [
 		"svelte",
-		"json"
+		"json",
+		"typescript"
 	],
 	"css.customData": [
 		".vscode/tailwind.json"

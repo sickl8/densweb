@@ -45,7 +45,7 @@
 
 <section class="w-full --min-h-[calc(100svh-5rem)] flex flex-col items-center justify-center py-32">
 	<div id="desc" class="-container relative w-full max-w-5xl h-full flex flex-col justify-center items-center [@media(max-width:500px)]:text-[60%] [@media(max-width:500px)]:leading-[2.5rem]">
-		<h2 class="-white [@media(max-width:500px)]:before:hidden text-[300%] font-semibold leading-[inherit] text-center before:inline-block before:-translate-x-12 before:leading-[0] before:text-[200%] before:content-[open-quote] before:w-0 before:h-0 before:font-bold before:text-torch-red-base after:inline-block after:translate-y-20 after:leading-[0] after:text-[200%] after:content-[close-quote] after:w-0 after:h-0 after:font-bold after:text-torch-red-base px-12 py-8 [@media(max-width:500px)]:px-6"
+		<h2 class="-white [@media(max-width:500px)]:before:hidden text-[300%] font-semibold leading-[inherit] text-center before:pointer-events-none after:pointer-events-none before:inline-block before:-translate-x-12 before:leading-[0] before:text-[200%] before:content-[open-quote] before:w-0 before:h-0 before:font-bold before:text-torch-red-base after:inline-block after:translate-y-20 after:leading-[0] after:text-[200%] after:content-[close-quote] after:w-0 after:h-0 after:font-bold after:text-torch-red-base px-12 py-8 [@media(max-width:500px)]:px-6"
 		use:hover={{callback: handleMouseEvent, listenToMouseMove: true}}>
 			DEN is a group of creative people from different industries gathered to
 			bring your most dreamy ideas into reality

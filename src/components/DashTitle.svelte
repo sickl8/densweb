@@ -3,7 +3,6 @@
 	let Class = "";
 	export { Class as class };
 	export let words: [string, string] = [ "word1", "word2" ];
-	console.log(twMerge("flex flex-col w-full", Class))
 </script>
 
 <div class="{twMerge("flex flex-col w-full", Class)}">

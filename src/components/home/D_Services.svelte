@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { serviceCardWidthInRems } from "$lib/stores";
     import { remsToPixels } from "$lib/utils";
     import Carousel from "../Carousel.svelte";
     import DashTitle from "../DashTitle.svelte";
@@ -68,7 +69,7 @@
 <section class="w-full -min-h-[calc(100svh-5rem)] flex flex-col items-center justify-start">
 <div class="flex flex-col w-full gap-12 items-center">
 	<DashTitle words={["Our", "Services"]} class="px-2 max-w-[calc(0.8*64rem)] --max-w-5xl --max-w-[80%] self-center"/>
-	<Carousel bind:carousel={carousel} {data} component={ServicesCarouselElement} itemsVisible={3} scrollAmount={remsToPixels(20)}/>
+	<Carousel bind:carousel={carousel} {data} component={ServicesCarouselElement} itemsVisible={3} scrollAmount={remsToPixels($serviceCardWidthInRems)}/>
 	<div class="-spacer"></div>
 </div>
 </section>

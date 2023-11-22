@@ -10,3 +10,5 @@ export let navData = writable([
 ]);
 export let scrollVelocity = writable(0);
 export let windowSmoothScroll = writable<Lenis>();
+
+export let serviceCardWidthInRems = writable<number>(30);

@@ -1,7 +1,7 @@
 <script lang="ts">
+    import { serviceCardWidthInRems } from "$lib/stores";
 	type Service = { domain: string; skills: string[] };
 	export let data: Service;
-
     import IntersectingCircles from "./IntersectingCircles.svg.svelte";
 
 	function capitalizeWord(word: string) {
@@ -17,7 +17,7 @@
 </script>
 
 <li class="-card-container -items --snap-center scale-100" data-scroll-snap-align="center">
-	<div class="-card w-[20rem]">
+	<div class="-card --w-[20rem]" style="width: {$serviceCardWidthInRems}rem">
 		<div class="-title">
 			<div class="icon">
 				<IntersectingCircles />

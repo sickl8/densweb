@@ -9,7 +9,7 @@
 
 </script>
 
-<header class="w-full h-20 sticky z-10 top-0 flex flex-col items-center bg-gradient-to-b from-black/90 from-10% via-black/70 via-40% to-transparent to-100%">
+<header class="w-full h-20 sticky z-50 top-0 left-0 flex flex-col items-center bg-gradient-to-b from-black/90 from-10% via-black/70 via-40% to-transparent to-100%">
 	<nav class="w-full max-w-[67.5rem] h-full">
 		<ul class="h-full w-full flex justify-between items-center">
 			<li class="h-full aspect-square flex justify-center items-center">

@@ -67,7 +67,7 @@ export const colors = {
 		800: 'hsla(145, 84%, 24%, 1)',
 		900: 'hsla(146, 81%, 20%, 1)',
 		950: 'hsla(147, 100%, 10%, 1)',
-	},	
+	},
 	white: "hsla(345, 100%, 99%, 1)",
 	black: "hsla(60, 50%, 1%, 1)",
 	current: "currentColor",

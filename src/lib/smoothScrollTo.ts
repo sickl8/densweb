@@ -35,6 +35,7 @@ export type SmoothScrollOptions = {
 	};
 	wheelMultiplier: number;
 	direction: "vertical" | "horizontal";
+	scrollAmount: number;
 }
 
 export class SmoothScroll {
@@ -56,14 +57,20 @@ export class SmoothScroll {
 			wheelMultiplier: Math.abs(options.wheelMultiplier ?? 10),
 			scrollable: options.scrollable ?? window,
 			direction: options.direction ?? "vertical",
+			scrollAmount: options.scrollAmount ?? 100,
 		}
+		// setInterval(() => {
+		// 	this._scrollTo(10, true);
+		// }, 100)
 		this.opt.scrollable.addEventListener("wheel", (_e: Event) => {
-			_e.preventDefault();
+
+			// _e.preventDefault();
 			let wheelEvent = _e as WheelEvent;
 			const e = normalizeWheel(_e);
 			// console.log(e);
 			this.shift = wheelEvent.shiftKey;
 			this._scrollTo(e.spinY, true);
+
 		})
 		// this.velocity.sub((velocity) => {
 		// 	if (this.opt.scrollable instanceof Window === false) {
@@ -97,33 +104,35 @@ export class SmoothScroll {
 		this.scroll.sub((s) => {
 			let el = this.opt.scrollable as HTMLElement;
 			this.tween.kill();
+			// console.log("killed")
 			this.tween = gsap.to(this.animatedScroll, {
 				value: this.scroll.value,
 				duration: 2,
 				ease: "power3.out",
 			})
 		})
+		// let ix = 0;
 		this.animatedScroll.sub((animated) => {
+			// console.log({animated})
 			let container = this.opt.scrollable as HTMLElement;
-			if (this.shift === (this.opt.direction === "horizontal")) {
-				let idx = +(this.shift && this.opt.direction === "horizontal");
-				let scrollKey = (["top", "left"] as const)[idx];
-				let containerScrollOriginKey = (["scrollTop", "scrollLeft"] as const)[idx];
-				let containerScrollDimKey = (["scrollHeight", "scrollWidth"] as const)[idx];
-				let containerClientDimKey = (["clientHeight", "clientWidth"] as const)[idx];
-				let maxScroll = container[containerScrollDimKey] - container[containerClientDimKey];
-				let delta = animated;
-				if (this.opt.infinite) {
-					if (delta < 0) {
-						delta = maxScroll + delta % maxScroll;
-					}
-					else if (delta > maxScroll) {
-						delta = delta % maxScroll;
-					}
+			let idx = +(this.opt.direction === "horizontal");
+			let scrollKey = (["top", "left"] as const)[idx];
+			let containerScrollOriginKey = (["scrollTop", "scrollLeft"] as const)[idx];
+			let containerScrollDimKey = (["scrollHeight", "scrollWidth"] as const)[idx];
+			let containerClientDimKey = (["clientHeight", "clientWidth"] as const)[idx];
+			let maxScroll = container[containerScrollDimKey] - container[containerClientDimKey];
+			let delta = animated;
+			if (this.opt.infinite) {
+				if (delta < 0) {
+					delta = maxScroll + delta % maxScroll;
 				}
-				this.sTo[scrollKey] = delta;
-				container.scrollTo(this.sTo);
+				else if (delta > maxScroll) {
+					delta = delta % maxScroll;
+				}
 			}
+			this.sTo[scrollKey] = delta;
+			// console.log(ix++, this.sTo);
+			container.scrollTo(this.sTo);
 		})
 	}
 	oldValue = 0;
@@ -158,10 +167,15 @@ export class SmoothScroll {
 					// 		// ease: "none",
 					// 	}],
 					// })
-					this.scroll.value += Math.sign(to) * 256;
+					if (this.shift === (this.opt.direction === "horizontal")) {
+						this.scrollTo(Math.sign(to) * this.opt.scrollAmount);
+					}
 				}
 			}
 		}
+	}
+	scrollTo(to: number, delta = true) {
+		this.scroll.value = this.scroll.value * +delta + to;
 	}
 	onScroll(cb: (data: { scroll: number, velocity: number}) => void) {
 		let oldV = 0;

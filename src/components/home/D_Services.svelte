@@ -110,10 +110,10 @@
 		let outer = carouselParts.carousel[carouselParts.carousel.length - 1];
 		outer.addEventListener("click", (e) => {
 			if (e.clientX < outer.clientWidth / 2) {
-				smooth.scrollLeft();
+				smooth.scrollRight();
 			}
 			else {
-				smooth.scrollRight();
+				smooth.scrollLeft();
 			}
 		})
 	})

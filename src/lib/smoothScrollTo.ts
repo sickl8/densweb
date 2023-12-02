@@ -144,10 +144,13 @@ export class SmoothScroll {
 	}
 	oldValue = 0;
 	scrollLeft(ntimes = 1) {
-		this.scrollTo(this.opt.scrollAmount * ntimes);
+		this.scrollTo(this.opt.scrollAmount * Math.abs(ntimes));
 	}
 	scrollRight(ntimes = 1) {
-		this.scrollTo(-this.opt.scrollAmount * ntimes);
+		this.scrollTo(-this.opt.scrollAmount * Math.abs(ntimes));
+	}
+	scrollNtimes(ntimes: number) {
+		this.scrollTo(this.opt.scrollAmount * ntimes);
 	}
 	private _scrollTo(to: number | HTMLElement, delta: boolean = false) {
 		if (to instanceof HTMLElement) {

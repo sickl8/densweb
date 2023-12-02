@@ -88,7 +88,7 @@
 	}
 
 	$: {
-		console.log({offsetsFromMiddle})
+		// console.log({offsetsFromMiddle})
 	}
 
 	onMount(() => {
@@ -98,16 +98,13 @@
 			let smooth: SmoothScroll = carouselParts.carousel[0].__smooth;
 			carouselParts.carouselElements.forEach(el => {
 				el.firstChild?.firstChild?.addEventListener("click", (e) => {
-					e.preventDefault();
 					let idx = visibleElements.indexOf(el);
 					if (idx !== -1) {
-						
-						if (idx < visibleElements.length / 2) {
-							smooth.scrollRight()
-						}
-						else {
-							smooth.scrollLeft()
-						}
+						let { xOffsetMiddle } = offsetsFromMiddle[idx];
+						let ntimes = Math.round(xOffsetMiddle);
+						if (ntimes)
+							e.preventDefault();
+						smooth.scrollNtimes(ntimes);
 					}
 				})
 			})

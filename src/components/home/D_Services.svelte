@@ -7,6 +7,7 @@
 	import gsap from "gsap-trial";
     import ServicesCarouselElement from "../ServicesCarouselElement.svelte";
     import { onMount } from "svelte";
+    import type { SmoothScroll } from "$lib/smoothScrollTo";
 	type Service = { domain: string; skills: string[] };
 
 	let _services: Service[] = [
@@ -103,7 +104,19 @@
 		carousel: [],
 	}
 
-
+	onMount(() => {
+		// @ts-ignore
+		let smooth: SmoothScroll = carouselParts.carousel[0].__smooth;
+		let outer = carouselParts.carousel[carouselParts.carousel.length - 1];
+		outer.addEventListener("click", (e) => {
+			if (e.clientX < outer.clientWidth / 2) {
+				smooth.scrollLeft();
+			}
+			else {
+				smooth.scrollRight();
+			}
+		})
+	})
 </script>
 
 <section class="w-full min-h-[calc(100svh-5rem)] flex flex-col items-center justify-start">

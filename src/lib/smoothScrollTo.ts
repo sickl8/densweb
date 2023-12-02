@@ -36,6 +36,8 @@ export type SmoothScrollOptions = {
 	wheelMultiplier: number;
 	direction: "vertical" | "horizontal";
 	scrollAmount: number;
+	ease: string;
+	duration: number;
 }
 
 export class SmoothScroll {
@@ -58,6 +60,8 @@ export class SmoothScroll {
 			scrollable: options.scrollable ?? window,
 			direction: options.direction ?? "vertical",
 			scrollAmount: options.scrollAmount ?? 100,
+			ease: options.ease ?? "power3.out",
+			duration: options.duration ?? 2,
 		}
 		// setInterval(() => {
 		// 	this._scrollTo(10, true);
@@ -103,12 +107,15 @@ export class SmoothScroll {
 		// })
 		this.scroll.sub((s) => {
 			let el = this.opt.scrollable as HTMLElement;
+			let ease = this.opt.ease;
+			if (this.opt.ease.endsWith(".inOut") && this.tween.progress() < 0.8) {
+				ease = ease.replace(".inOut", ".out");
+			}
 			this.tween.kill();
-			// console.log("killed")
 			this.tween = gsap.to(this.animatedScroll, {
 				value: this.scroll.value,
-				duration: 2,
-				ease: "power3.out",
+				duration: this.opt.duration,
+				ease: ease,
 			})
 		})
 		// let ix = 0;

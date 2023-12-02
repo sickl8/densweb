@@ -56,16 +56,20 @@
 	let content: HTMLElement;
 
 	export let animateElements: (carousel: HTMLElement, carouselElements: HTMLElement[], lastCarouselScroll: number) => void = () => {};
-
+	export let maskImageElementIndex = 2;
+	
 	let smooth: SmoothScroll;
 	onMount(() => {
 		carousel = carouselParts.carousel[0];
 		carouselElements = carouselParts.carouselElements;
+		carouselParts.carousel[maskImageElementIndex].classList.add("-mask-image");
 		smooth = new SmoothScroll({
 			scrollable: carousel,
 			direction: "horizontal",
 			...options
 		})
+		// @ts-ignore
+		carousel.__smooth = smooth;
 		minScroll = 0;
 		maxScroll = carousel.scrollWidth;
 		console.log({minScroll, maxScroll})
@@ -74,7 +78,7 @@
 
 </script>
 
-<div bind:this={carouselParts.carousel[3]} class="relative w-full flex flex-col items-center">
+<div bind:this={carouselParts.carousel[3]} class="relative w-full flex flex-col items-center {Class} []">
 	<!-- {#each [">", "<"] as d, i}
 	<button class="rounded bg-white text-black p-2 absolute z-10 {i ? "left-0" : "right-0"} [@media(min-width:500px)]:mx-[5%] top-0 -[50%] h-full opacity-100 [@media(hover:none)]:inline-block hidden drop-shadow-[0px_0px_20px_white]" on:click={() => {
 		smooth.scrollTo(-options.scrollAmount * (i * 2 - 1));
@@ -101,15 +105,15 @@
 	.-carousel {
 		touch-action: pan-y;
 	}
-	.-wrapper {
-		--cr-msk-inline-shade: 10%;
-		--cr-msk-inline-trsprt: 10%;
+	.-mask-image {
+		--mskshade: var(--msk-shade, 10%);
+		--msktrprt: var(--msk-transparent, 10%);
 		mask-image: linear-gradient(
 				90deg,
-				transparent				calc(0% + var(--cr-msk-inline-shade)),
-				rgba(0, 0, 0, 1) calc(var(--cr-msk-inline-shade) + var(--cr-msk-inline-trsprt)),
-				rgba(0, 0, 0, 1) calc(100% - (var(--cr-msk-inline-shade) + var(--cr-msk-inline-trsprt))),
-				transparent				calc(100% - var(--cr-msk-inline-shade))
+				transparent				calc(0% + var(--mskshade)),
+				rgba(0, 0, 0, 1) calc(var(--mskshade) + var(--msktrprt)),
+				rgba(0, 0, 0, 1) calc(100% - (var(--mskshade) + var(--msktrprt))),
+				transparent				calc(100% - var(--mskshade))
 			);
 	}
 </style>

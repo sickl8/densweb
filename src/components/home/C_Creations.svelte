@@ -16,11 +16,20 @@
 		img: path.join(assetsDir, "creations", el.name, el.img)
 	}))
 
+	let visibleElements: HTMLElement[] = []
+	let offsetsFromMiddle: {
+		img: Element;
+		redImg: Element;
+		li: HTMLElement;
+		offsetMiddle: number;
+		offset: number;
+		xOffsetMiddle: number;
+	}[] = [];
 	function animateElements(carousel: HTMLElement, carouselElements: HTMLElement[], lastCarouselScroll: number) {
 		if (!carousel) return;
 		let carouselScroll = carousel.scrollLeft;
 		if (carouselScroll !== lastCarouselScroll) {
-			let visibleElements = carouselElements.filter(el => {
+			visibleElements = carouselElements.filter(el => {
 				let offsetFromParentVP = el.offsetLeft - carouselScroll;
 				return (offsetFromParentVP + 1 < carousel.offsetWidth && offsetFromParentVP + el.offsetWidth > 1);
 			});
@@ -32,10 +41,12 @@
 				return { img, redImg, li, offsetMiddle, offset: offsetMiddle };
 			});
 			let correction = calcs.map(i => i.offsetMiddle).filter(i => i > -1 && i < 1);
+			const itemWidth = carouselElements[0].offsetWidth;
 			calcs = calcs.map((calc) => {
 				let { offsetMiddle } = calc;
 				return { ...calc, offset: Math.abs(offsetMiddle - (correction[0] || 0)) };
 			})
+			offsetsFromMiddle = calcs.map(x => ({...x, xOffsetMiddle: (x.offsetMiddle - (correction[0] || 0)) / itemWidth }));
 			let scaleData = [1, 0.8, 0.8, 0.8];
 			let opacityData = [0, 1, 1, 1];
 			calcs.forEach(calc => {
@@ -68,12 +79,47 @@
 		requestAnimationFrame(() => { animateElements(carousel, carouselElements, lastCarouselScroll) });
 	}
 
+	let carouselParts: {
+		carousel: HTMLElement[];
+		carouselElements: HTMLElement[];
+	} = {
+		carousel: [],
+		carouselElements: [],
+	}
+
+	$: {
+		console.log({offsetsFromMiddle})
+	}
+
+	onMount(() => {
+		try {
+			console.log({carouselParts});
+			// @ts-ignore
+			let smooth: SmoothScroll = carouselParts.carousel[0].__smooth;
+			carouselParts.carouselElements.forEach(el => {
+				el.firstChild?.firstChild?.addEventListener("click", (e) => {
+					e.preventDefault();
+					let idx = visibleElements.indexOf(el);
+					if (idx !== -1) {
+						
+						if (idx < visibleElements.length / 2) {
+							smooth.scrollRight()
+						}
+						else {
+							smooth.scrollLeft()
+						}
+					}
+				})
+			})
+		} catch {}
+	})
+
 </script>
 
 <section class="w-full min-h-[calc(100svh-5rem)] flex flex-col items-center justify-start">
 	<div class="flex flex-col w-full gap-12 items-center">
 		<DashTitle words={["Our", "Creations"]} class="px-2 max-w-[calc(0.8*64rem)] --max-w-5xl --max-w-[80%] self-center"/>
-		<Carousel animateElements={animateElements} {data} component={CreationsCarouselElement} options={{scrollAmount: remsToPixels(16)}}/>
+		<Carousel {carouselParts} animateElements={animateElements} {data} component={CreationsCarouselElement} options={{scrollAmount: remsToPixels(16)}}/>
 		<div class="-spacer"></div>
 	</div>
 </section>

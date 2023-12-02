@@ -6,6 +6,7 @@
     import IntersectingCircles from "../IntersectingCircles.svg.svelte";
 	import gsap from "gsap-trial";
     import ServicesCarouselElement from "../ServicesCarouselElement.svelte";
+    import { onMount } from "svelte";
 	type Service = { domain: string; skills: string[] };
 
 	let _services: Service[] = [
@@ -49,12 +50,14 @@
 
 	let data = _services;
 
+	let visibleElements: HTMLElement[] = [];
+
 	function animateElements(carousel: HTMLElement, carouselElements: HTMLElement[], lastCarouselScroll: number) {
 		if (!carousel) return;
 		let carouselScroll = carousel.scrollLeft;
 		if (carouselScroll !== lastCarouselScroll) {
 			console.log({carousel, carouselElements});
-			let visibleElements = carouselElements.filter(el => {
+			visibleElements = carouselElements.filter(el => {
 				let offsetFromParentVP = el.offsetLeft - carouselScroll;
 				return (offsetFromParentVP + 1 < carousel.offsetWidth && offsetFromParentVP + el.offsetWidth > 1);
 			});
@@ -95,20 +98,18 @@
 		}
 		requestAnimationFrame(() => animateElements(carousel, carouselElements, lastCarouselScroll));
 	}
-	let carouselParts = {
+	let carouselParts: { carousel: HTMLElement[], carouselElements: HTMLElement[] } = {
 		carouselElements: [],
 		carousel: [],
 	}
 
-	$: {
-		console.log({carouselParts});
-	}
+
 </script>
 
 <section class="w-full min-h-[calc(100svh-5rem)] flex flex-col items-center justify-start">
 <div class="flex flex-col w-full gap-12 items-center">
 	<DashTitle words={["Our", "Services"]} class="px-2 max-w-[calc(0.8*64rem)] --max-w-5xl --max-w-[80%] self-center"/>
-	<Carousel {carouselParts} animateElements={animateElements} {data} component={ServicesCarouselElement} maxItemsVisible={3} options={{scrollAmount: remsToPixels($serviceCardWidthInRems), ease: "power2.inOut", duration: 1}}/>
+	<Carousel class="[--msk-shade:15%] [--msk-transparent:10%]" maskImageElementIndex={1} {carouselParts} animateElements={animateElements} {data} component={ServicesCarouselElement} maxItemsVisible={3} options={{scrollAmount: remsToPixels($serviceCardWidthInRems), ease: "power2.inOut", duration: 1}}/>
 	<div class="-spacer"></div>
 </div>
 </section>

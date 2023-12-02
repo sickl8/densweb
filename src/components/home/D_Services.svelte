@@ -95,13 +95,20 @@
 		}
 		requestAnimationFrame(() => animateElements(carousel, carouselElements, lastCarouselScroll));
 	}
-	let carouselElements: HTMLElement[] = [];
+	let carouselParts = {
+		carouselElements: [],
+		carousel: [],
+	}
+
+	$: {
+		console.log({carouselParts});
+	}
 </script>
 
 <section class="w-full min-h-[calc(100svh-5rem)] flex flex-col items-center justify-start">
 <div class="flex flex-col w-full gap-12 items-center">
 	<DashTitle words={["Our", "Services"]} class="px-2 max-w-[calc(0.8*64rem)] --max-w-5xl --max-w-[80%] self-center"/>
-	<Carousel bind:carouselElements={carouselElements} animateElements={animateElements} {data} component={ServicesCarouselElement} itemsVisible={3} options={{scrollAmount: remsToPixels($serviceCardWidthInRems), ease: "power2.inOut", duration: 1}}/>
+	<Carousel {carouselParts} animateElements={animateElements} {data} component={ServicesCarouselElement} maxItemsVisible={3} options={{scrollAmount: remsToPixels($serviceCardWidthInRems), ease: "power2.inOut", duration: 1}}/>
 	<div class="-spacer"></div>
 </div>
 </section>

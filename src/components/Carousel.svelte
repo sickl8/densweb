@@ -62,7 +62,7 @@
 	onMount(() => {
 		carousel = carouselParts.carousel[0];
 		carouselElements = carouselParts.carouselElements;
-		carouselParts.carousel[maskImageElementIndex].classList.add("-mask-image");
+		carouselParts.carousel[maskImageElementIndex].classList.add("__mask-image");
 		smooth = new SmoothScroll({
 			scrollable: carousel,
 			direction: "horizontal",
@@ -78,7 +78,7 @@
 
 </script>
 
-<div bind:this={carouselParts.carousel[3]} class="relative w-full flex flex-col items-center {Class} []">
+<div bind:this={carouselParts.carousel[3]} class="-root relative w-full flex flex-col items-center {Class} []">
 	<!-- {#each [">", "<"] as d, i}
 	<button class="rounded bg-white text-black p-2 absolute z-10 {i ? "left-0" : "right-0"} [@media(min-width:500px)]:mx-[5%] top-0 -[50%] h-full opacity-100 [@media(hover:none)]:inline-block hidden drop-shadow-[0px_0px_20px_white]" on:click={() => {
 		smooth.scrollTo(-options.scrollAmount * (i * 2 - 1));
@@ -105,7 +105,7 @@
 	.-carousel {
 		touch-action: pan-y;
 	}
-	.-mask-image {
+	:global(.__mask-image) {
 		--mskshade: var(--msk-shade, 10%);
 		--msktrprt: var(--msk-transparent, 10%);
 		mask-image: linear-gradient(

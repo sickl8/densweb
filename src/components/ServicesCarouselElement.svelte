@@ -19,14 +19,6 @@
 	}
 </script>
 
-<!-- 				background: linear-gradient(
-					190deg,
-					rgba(var(--lavender_blush-rgb), 10%) 0%,
-					rgba(var(--lavender_blush-rgb), 3%) 40%,
-					rgba(var(--lavender_blush-rgb), 0%) 60%,
-					rgba(var(--lavender_blush-rgb), 0%) 75%,
-					rgba(var(--lavender_blush-rgb), 0%) 100% -->
-
 <li class="-card-container cursor-pointer -items --snap-center " data-scroll-snap-align="center" bind:this={carouselElements[index]}>
 	<div class="--scale-[0.95] bg-black  rounded-xl border border-[#808080] overflow-hidden" style="width: {$serviceCardWidthInRems}rem">
 		<div class="-card h-64 py-6 px-8 flex flex-col gap-4" style="background: linear-gradient(190deg, {colors.white.replace("1)", "10%)")} 0%, {colors.white.replace("1)", "3%)")} 40%)">
@@ -35,13 +27,13 @@
 					<IntersectingCircles class="w-8 h-8"/>
 				</div>
 				<div class="-barrier h-8 w-[1px] bg-white" />
-				<h2 class="-text">
+				<h2 class="-text select-none">
 					{capitalizeSentence(data.domain)}
 				</h2>
 			</div>
 			<ul class="-skills flex flex-col flex-wrap justify-start items-start flex-grow min-h-0 gap-2 px-8">
 				{#each data.skills as skill}
-					<li class="-skill marker:text-torch-red-base marker:text-base [list-style-type:square] --max-w-[50%]">
+					<li class="-skill select-none marker:text-torch-red-base marker:text-base [list-style-type:square] --max-w-[50%]">
 						{capitalizeSentence(skill)}
 					</li>
 				{/each}
@@ -49,12 +41,3 @@
 		</div>
 	</div>
 </li>
-
-<!-- <div class="-card-container relative min-h-[302px]">
-	<div class="-card">
-		<ul class="-skills max-h-[70%] px-20">
-			<li class="-skill list-disc list-inside">
-			</li>
-		</ul>
-	</div>
-</div> -->

@@ -121,30 +121,8 @@
 
 <section class="w-full min-h-[calc(100svh-5rem)] flex flex-col items-center justify-start">
 <div class="flex flex-col w-full gap-12 items-center">
-	<DashTitle words={["Our", "Services"]} class="px-2 max-w-[calc(0.8*64rem)] --max-w-5xl --max-w-[80%] self-center"/>
+	<DashTitle words={["Our", "Services"]} class="px-4 max-w-[67.5rem] --max-w-5xl --max-w-[80%] self-center"/>
 	<Carousel class="[--msk-shade:15%] [--msk-transparent:10%]" maskImageElementIndex={1} {carouselParts} animateElements={animateElements} {data} component={ServicesCarouselElement} maxItemsVisible={3} options={{scrollAmount: remsToPixels($serviceCardWidthInRems), ease: "power2.inOut", duration: 1}}/>
 	<div class="-spacer"></div>
 </div>
 </section>
-
-<!-- <div class="card-container s-UyWNFZfOJ9vg middle">
-	<div class="card flex-column flex-gap20">
-		<div class="title flex-ai-cr flex-gap15">
-			<div class="icon">
-				<IntersectingCircles />
-			</div>
-			<div class="barrier" />
-			<h2 class="text">
-				{capitalizeSentence(service.domain)}
-			</h2>
-		</div>
-		<ul class="skills flex-column flex-wrap flex-gap10">
-			{#each service.skills as skill}
-				<li class="skill">
-					{capitalizeSentence(skill)}
-				</li>
-			{/each}
-		</ul>
-	</div>
-</div> -->
-

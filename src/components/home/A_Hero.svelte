@@ -49,9 +49,9 @@
 	}
 </script>
 
-<section class="relative overflow-visible w-full min-h-[calc(100svh-5rem)] px-2 flex flex-col items-center justify-center">
+<section class="relative px-4 overflow-visible w-full min-h-[calc(100svh-5rem)] flex flex-col items-center justify-center">
 	<LogoWireframe class="text-neutral-500/50 absolute left-[50%] top-[-15%] h-[150%] -z-10"/>
-	<div class="-container w-full max-w-5xl h-full flex flex-col justify-center items-center gap-12 px-2">
+	<div class="-container w-full max-w-5xl h-full flex flex-col justify-center items-center gap-12">
 		<div class="-top w-full flex justify-between items-center">
 			<div class="-left sm:max-w-[50%] flex flex-col gap-8">
 				<div class="-text flex flex-col justify-center items-start gap-5">

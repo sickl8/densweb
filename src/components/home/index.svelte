@@ -4,13 +4,15 @@
 	import AHero from "./A_Hero.svelte";
 	import DServices from "./D_Services.svelte";
 	import EAboutUs from "./E_AboutUs.svelte";
+	import FSoundSpace from "./F_SoundSpace.svelte";
 </script>
 
-<AHero />
+<!-- <AHero />
 <BDescription />
 <CCreations />
 <DServices />
-<EAboutUs />
+<EAboutUs /> -->
+<FSoundSpace />
 
 <!-- <Creations bind:work_section={$navElements["Our Work"]}></Creations> -->
 <!-- <Services bind:services_section={$navElements["Services"]}></Services> -->

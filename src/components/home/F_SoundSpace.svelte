@@ -130,7 +130,7 @@
 			<div class="-redribon h-2 bg-torch-red-base"></div>
 		</div>
 		<div class="-blueshade bg-gradient-to-b from-[rgba(0,85,255,0.34)] basis-32"></div>
-		<div class="px-4 w-full self-center max-w-[67.5rem] flex gap-12 grow [&_>*]:grow [&_>*]:basis-0">
+		<div class="px-4 w-full self-center max-w-[67.5rem] flex [@media(max-width:600px)]:flex-col gap-12 grow [&_>*]:grow [&_>*]:basis-0">
 			<div class="-left flex flex-col gap-8 font-light">
 				<DashTitle words={["sound", "space"]} class="max-w-[67.5rem] --max-w-5xl --max-w-[80%] self-center"/>
 				<h3 class="-desc">

@@ -235,7 +235,7 @@
 						<!-- {#each {length: lim} as _, i}
 							<canvas class="-vizcanvas absolute top-0 left-0 dim-full [mix-blend-mode:screen]" width="{vizWidth}px" height="{vizHeight}px" style="translate: 0 {vizHeight * 0}px; width: {vizWidth}px; height: {vizHeight}px" bind:this={canvases[i]}></canvas>
 						{/each} -->
-						<svg class="absolute top-0 left-0 w-full" style={`translate: 0 ${vizHeight * 1}px`}>
+						<svg class="absolute top-0 left-0 w-full" style={`translate: 0 ${vizHeight * 0}px`}>
 							{#each {length: lim} as _, i}
 								<polygon class="-vizpoly  max-w-full " style={`mix-blend-mode: screen; filter: drop-shadow(0px 0px 10px ${fillStyles[i]}${Math.floor(0.5 * 255).toString(16)})`} bind:this={polygons[i]} fill={fillStyles[i]}></polygon>
 							{/each}

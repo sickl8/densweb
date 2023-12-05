@@ -159,6 +159,10 @@
 
 	onMount(() => {
 		let frame = 0;
+		const targetFrameRate = 60;
+		setInterval(() => {
+			requestAnimationFrame(draw)
+		}, 1000 / targetFrameRate);
 		function draw() {
 			if (!isPaused2) {
 				for (let i = 0; i < lim; i++) {
@@ -197,10 +201,9 @@
 					isPaused2 = !isPaused2;
 				}
 			}
-			requestAnimationFrame(draw);
+			// requestAnimationFrame(draw);
 		}
-		requestAnimationFrame(draw)
-
+		// requestAnimationFrame(draw)
 	})
 
 	$: {

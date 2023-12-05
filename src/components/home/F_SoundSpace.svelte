@@ -83,6 +83,7 @@
 				minFreq: useStep ? minFreq + i * freqStep : minFreq + i * (maxFreq - minFreq) / (lim + 1),
 				mode: 10,
 				onCanvasDraw: (instance: AudioMotionAnalyzer) => {
+					if (isPaused) return;
 					if (i === 0) {
 						_updateData++;
 					}

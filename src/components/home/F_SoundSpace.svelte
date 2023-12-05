@@ -41,7 +41,7 @@
 	vizData[VizDataEnum.Blue].maxDec = -40;
 	vizData[VizDataEnum.Green].maxDec = -35;
 	vizData[VizDataEnum.Cyan].maxDec = -30;
-	const lim = 5;
+	const lim = 1;
 	const minFreq = 1000, maxFreq = 2000, freqStep = 128, useStep = true;
 	function roundingFunc(num: number, by = 4) {
 		return Math.round(num * by) / by;

@@ -14,6 +14,7 @@
 	let vizWidth: number = 0;
 	let vizHeight: number = 0;
 	let isPaused: boolean = true;
+	let isPaused2: boolean = true;
 	let canvases: HTMLCanvasElement[] = [];
 	let polygons: SVGPolygonElement[] = [];
 
@@ -40,12 +41,16 @@
 	vizData[VizDataEnum.Blue].maxDec = -40;
 	vizData[VizDataEnum.Green].maxDec = -35;
 	vizData[VizDataEnum.Cyan].maxDec = -30;
-	const lim = 1;
+	const lim = 5;
 	const minFreq = 1000, maxFreq = 2000, freqStep = 128, useStep = true;
 	function roundingFunc(num: number, by = 4) {
 		return Math.round(num * by) / by;
 	}
-	let pointsForEachCanvas: [number, number][][] = new Array(lim).map(() => {
+	type FramePoints = [number, number][];
+	let pointsForEachCanvas: FramePoints[] = new Array(lim).map(() => {
+		return [];
+	});
+	let pointsForEachCanvasForEachFrame: FramePoints[][] = [...new Array(lim).keys()].map(() => {
 		return [];
 	});
 	let updateData = 0;
@@ -59,11 +64,12 @@
 		_fps = 0;
 		_updateData = 0;
 	}, 1000)
+	let contexts: CanvasRenderingContext2D[];
 	onMount(() => {
 		let audioMotion: AudioMotionAnalyzer[] = [];
 		let connectSpeakers = true;
 		let ctx: CanvasRenderingContext2D;
-		let contexts = canvases.map((canvas) => {
+		contexts = canvases.map((canvas) => {
 			return canvas.getContext("2d")!
 		});
 		for (let i = 0; i < lim; i++) {
@@ -102,7 +108,19 @@
 											.map((val, index) => [pathEnd.x   - index, (halfCanvasHeight + Math.max(val * 0.8 * halfCanvasHeight, Math.floor(vizMinHeight / 2)))]);
 					let points = [...straight, ...reverse];
 					let roundTo = 4;
-					pointsForEachCanvas[i] = points.map(point => { return [roundingFunc(point[0], Math.pow(2, roundTo)), roundingFunc(point[1], Math.pow(2, roundTo))] });
+					// console.log("test1")
+					points = points.map(point => { return [roundingFunc(point[0], Math.pow(2, roundTo)), roundingFunc(point[1], Math.pow(2, roundTo))] });
+					// console.log("test2")
+					pointsForEachCanvas[i] = points;
+					// console.log("test3")
+					// pointsForEachCanvasForEachFrame[i] = [...pointsForEachCanvasForEachFrame[i], points];
+					// console.log(`: ${[pointsForEachCanvasForEachFrame[i], points]}`)
+					if (!isPaused) {
+						// console.log(pointsForEachCanvasForEachFrame)
+						// console.log(pointsForEachCanvasForEachFrame[i])
+						pointsForEachCanvasForEachFrame[i].push(points);
+					}
+					// console.log("test4")
 					// if (isPaused)
 					// 	return;
 
@@ -134,34 +152,54 @@
 			connectSpeakers = false;
 			audioMotion.push(new AudioMotionAnalyzer(null!, options));
 		}
+	})
+	
+	// $: console.log({pointsForEachCanvasForEachFrame: pointsForEachCanvasForEachFrame[0]});
+
+	onMount(() => {
+		let frame = 0;
 		function draw() {
-			for (let i = 0; i < lim; i++) {
-				let points = pointsForEachCanvas[i];
-				let dim = {width: vizWidth, height: vizHeight};
-				if (i === 0) {
-					_fps++;
+			if (!isPaused2) {
+				for (let i = 0; i < lim; i++) {
+					// let points = pointsForEachCanvas[i];
+					let points = pointsForEachCanvasForEachFrame[i][frame];
+					let dim = {width: vizWidth, height: vizHeight};
+					if (i === 0) {
+						_fps++;
+					}
+					{
+						polygons[i].setAttribute("points", points.map(p => `${p[0]},${p[1]}`).join(" "));
+					}
+					{
+						let ctx = contexts[i];
+						ctx.clearRect(0,0,dim.width, dim.height)
+						ctx.beginPath();
+						ctx.moveTo(...points[0]);
+						points.map(([x, y]) => {
+							ctx.lineTo(x,y);
+						})
+						ctx.fillStyle = fillStyles[i];
+						ctx.shadowColor = fillStyles[i] + "7F";
+						ctx.shadowBlur = 20;
+						ctx.closePath();
+						ctx.fill();
+					}
 				}
-				{
-					polygons[i].setAttribute("points", points.map(p => `${p[0]},${p[1]}`).join(" "));
+				frame++;
+				if (frame < pointsForEachCanvasForEachFrame[0].length) {
 				}
-				{
-					ctx = contexts[i];
-					ctx.clearRect(0,0,dim.width, dim.height)
-					ctx.beginPath();
-					ctx.moveTo(...points[0]);
-					points.map(([x, y]) => {
-						ctx.lineTo(x,y);
-					})
-					ctx.fillStyle = fillStyles[i];
-					ctx.shadowColor = fillStyles[i] + "7F";
-					ctx.shadowBlur = 20;
-					ctx.closePath();
-					ctx.fill();
+				else {
+					pointsForEachCanvasForEachFrame = [...new Array(lim).keys()].map(() => {
+						return [];
+					});
+					frame = 0;
+					isPaused2 = !isPaused2;
 				}
 			}
 			requestAnimationFrame(draw);
 		}
 		requestAnimationFrame(draw)
+
 	})
 
 	$: {
@@ -184,9 +222,14 @@
 				<div class="-data">fps: {fps}, updateData: {updateData}</div>
 				<div class="-player flex gap-2 items-stretch h-24">
 					<audio controls={false} src={path.join(assetsDir, "audio", "den_soundspace.wav")} id="music" bind:this={player} bind:paused={isPaused}></audio>
-					<button class="-playpause w-20 h-20 rounded-full cursor-default self-center" on:click={() => { isPaused = !isPaused;}}>
-						<PausePlayButton class="w-full h-full [&_>*]:cursor-pointer" paused={isPaused}></PausePlayButton>
-					</button>
+					<div class="-inner flex flex-col">
+						<button class="-playpause w-20 h-20 rounded-full cursor-default self-center" on:click={() => { isPaused = !isPaused;}}>
+							<PausePlayButton class="w-full h-full [&_>*]:cursor-pointer" paused={isPaused}></PausePlayButton>
+						</button>
+						<button class="-playpause w-20 h-20 rounded-full cursor-default self-center" on:click={() => { isPaused2 = !isPaused2;}}>
+							<PausePlayButton class="w-full h-full [&_>*]:cursor-pointer" paused={isPaused2}></PausePlayButton>
+						</button>
+					</div>
 					<div class="-visualizer relative grow" bind:clientWidth={vizWidth} bind:clientHeight={vizHeight}>
 						{#each {length: lim} as _, i}
 							<canvas class="-vizcanvas absolute top-0 left-0 dim-full [mix-blend-mode:screen]" width="{vizWidth}px" height="{vizHeight}px" style="translate: 0 {vizHeight * 0}px; width: {vizWidth}px; height: {vizHeight}px" bind:this={canvases[i]}></canvas>

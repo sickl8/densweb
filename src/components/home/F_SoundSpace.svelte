@@ -190,9 +190,9 @@
 				if (frame < pointsForEachCanvasForEachFrame[0].length) {
 				}
 				else {
-					pointsForEachCanvasForEachFrame = [...new Array(lim).keys()].map(() => {
-						return [];
-					});
+					// pointsForEachCanvasForEachFrame = [...new Array(lim).keys()].map(() => {
+					// 	return [];
+					// });
 					frame = 0;
 					isPaused2 = !isPaused2;
 				}

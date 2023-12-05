@@ -44,7 +44,7 @@
 	vizData[VizDataEnum.Blue].maxDec = -40;
 	vizData[VizDataEnum.Green].maxDec = -35;
 	vizData[VizDataEnum.Cyan].maxDec = -30;
-	const lim = 1;
+	const lim = 5;
 	const minFreq = 1000, maxFreq = 2000, freqStep = 128, useStep = true;
 	function roundingFunc(num: number, by = 4) {
 		return Math.round(num * by) / by;
@@ -69,12 +69,12 @@
 	}, 1000)
 	let contexts: CanvasRenderingContext2D[];
 	onMount(() => {
+		// contexts = canvases.map((canvas) => {
+		// 	return canvas.getContext("2d")!
+		// });
 		// let audioMotion: AudioMotionAnalyzer[] = [];
 		// let connectSpeakers = true;
 		// let ctx: CanvasRenderingContext2D;
-		contexts = canvases.map((canvas) => {
-			return canvas.getContext("2d")!
-		});
 		// for (let i = 0; i < lim; i++) {
 		// 	let options: ConstructorOptions = {
 		// 		source: !i ? player : audioMotion[0].connectedSources[0],
@@ -180,23 +180,23 @@
 					if (i === 0) {
 						_fps++;
 					}
-					// {
-					// 	polygons[i].setAttribute("points", points.map(p => `${p[0]},${p[1]}`).join(" "));
-					// }
 					{
-						let ctx = contexts[i];
-						ctx.clearRect(0,0,dim.width, dim.height)
-						ctx.beginPath();
-						ctx.moveTo(...points[0]);
-						points.map(([x, y]) => {
-							ctx.lineTo(x,y);
-						})
-						ctx.fillStyle = fillStyles[i];
-						ctx.shadowColor = fillStyles[i] + "7F";
-						ctx.shadowBlur = 20;
-						ctx.closePath();
-						ctx.fill();
+						polygons[i].setAttribute("points", points.map(p => `${p[0]},${p[1]}`).join(" "));
 					}
+					// {
+					// 	let ctx = contexts[i];
+					// 	ctx.clearRect(0,0,dim.width, dim.height)
+					// 	ctx.beginPath();
+					// 	ctx.moveTo(...points[0]);
+					// 	points.map(([x, y]) => {
+					// 		ctx.lineTo(x,y);
+					// 	})
+					// 	ctx.fillStyle = fillStyles[i];
+					// 	ctx.shadowColor = fillStyles[i] + "7F";
+					// 	ctx.shadowBlur = 20;
+					// 	ctx.closePath();
+					// 	ctx.fill();
+					// }
 				}
 				frame++;
 				if (frame < pointsForEachCanvasForEachFrame[0].length) {
@@ -244,14 +244,14 @@
 						</button>
 					</div>
 					<div class="-visualizer relative grow" bind:clientWidth={_vizWidth} bind:clientHeight={_vizHeight}>
-						{#each {length: lim} as _, i}
+						<!-- {#each {length: lim} as _, i}
 							<canvas class="-vizcanvas absolute top-0 left-0 dim-full [mix-blend-mode:screen]" width="{vizWidth}px" height="{vizHeight}px" style="translate: 0 {vizHeight * 0}px; width: {vizWidth}px; height: {vizHeight}px" bind:this={canvases[i]}></canvas>
-						{/each}
-						<!-- <svg class="absolute top-0 left-0 w-full" style={`translate: 0 ${vizHeight * 0}px`}>
+						{/each} -->
+						<svg class="absolute top-0 left-0 w-full" style={`translate: 0 ${vizHeight * 0}px`}>
 							{#each {length: lim} as _, i}
 								<polygon class="-vizpoly  max-w-full " style={`mix-blend-mode: screen; filter: drop-shadow(0px 0px 10px ${fillStyles[i]}${Math.floor(0.5 * 255).toString(16)})`} bind:this={polygons[i]} fill={fillStyles[i]}></polygon>
 							{/each}
-						</svg> -->
+						</svg>
 					</div>
 				</div>
 			</div>

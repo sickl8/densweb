@@ -171,20 +171,20 @@
 					{
 						polygons[i].setAttribute("points", points.map(p => `${p[0]},${p[1]}`).join(" "));
 					}
-					{
-						let ctx = contexts[i];
-						ctx.clearRect(0,0,dim.width, dim.height)
-						ctx.beginPath();
-						ctx.moveTo(...points[0]);
-						points.map(([x, y]) => {
-							ctx.lineTo(x,y);
-						})
-						ctx.fillStyle = fillStyles[i];
-						ctx.shadowColor = fillStyles[i] + "7F";
-						ctx.shadowBlur = 20;
-						ctx.closePath();
-						ctx.fill();
-					}
+					// {
+					// 	let ctx = contexts[i];
+					// 	ctx.clearRect(0,0,dim.width, dim.height)
+					// 	ctx.beginPath();
+					// 	ctx.moveTo(...points[0]);
+					// 	points.map(([x, y]) => {
+					// 		ctx.lineTo(x,y);
+					// 	})
+					// 	ctx.fillStyle = fillStyles[i];
+					// 	ctx.shadowColor = fillStyles[i] + "7F";
+					// 	ctx.shadowBlur = 20;
+					// 	ctx.closePath();
+					// 	ctx.fill();
+					// }
 				}
 				frame++;
 				if (frame < pointsForEachCanvasForEachFrame[0].length) {
@@ -232,9 +232,9 @@
 						</button>
 					</div>
 					<div class="-visualizer relative grow" bind:clientWidth={vizWidth} bind:clientHeight={vizHeight}>
-						{#each {length: lim} as _, i}
+						<!-- {#each {length: lim} as _, i}
 							<canvas class="-vizcanvas absolute top-0 left-0 dim-full [mix-blend-mode:screen]" width="{vizWidth}px" height="{vizHeight}px" style="translate: 0 {vizHeight * 0}px; width: {vizWidth}px; height: {vizHeight}px" bind:this={canvases[i]}></canvas>
-						{/each}
+						{/each} -->
 						<svg class="absolute top-0 left-0 w-full" style={`translate: 0 ${vizHeight * 1}px`}>
 							{#each {length: lim} as _, i}
 								<polygon class="-vizpoly  max-w-full " style={`mix-blend-mode: screen; filter: drop-shadow(0px 0px 10px ${fillStyles[i]}${Math.floor(0.5 * 255).toString(16)})`} bind:this={polygons[i]} fill={fillStyles[i]}></polygon>

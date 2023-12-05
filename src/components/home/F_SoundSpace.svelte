@@ -40,12 +40,19 @@
 	vizData[VizDataEnum.Blue].maxDec = -40;
 	vizData[VizDataEnum.Green].maxDec = -35;
 	vizData[VizDataEnum.Cyan].maxDec = -30;
-	const lim = 5;
+	const lim = 1;
 	const minFreq = 1000, maxFreq = 2000, freqStep = 128, useStep = true;
-	function roundingFunc(num: number) {
-		let by = 4;
+	function roundingFunc(num: number, by = 4) {
 		return Math.round(num * by) / by;
 	}
+	let pointsForEachCanvas: [number, number][][] = new Array(lim).map(() => {
+		return [];
+	});
+	let updateData = 0;
+	setInterval(() => {
+		console.log({updateData});
+		updateData = 0;
+	}, 1000)
 	onMount(() => {
 		let audioMotion: AudioMotionAnalyzer[] = [];
 		let connectSpeakers = true;
@@ -64,6 +71,9 @@
 				minFreq: useStep ? minFreq + i * freqStep : minFreq + i * (maxFreq - minFreq) / (lim + 1),
 				mode: 10,
 				onCanvasDraw: (instance: AudioMotionAnalyzer) => {
+					if (i === 0) {
+						updateData++;
+					}
 					try {
 					let bars = instance.getBars();
 					let barX = [...Array.from(Array(bars.length).keys()), bars.length, bars.length + 1];
@@ -81,31 +91,32 @@
 					}
 					let vizMinHeight = 1;
 					let halfCanvasHeight = dim.height / 2;
-					let straight = yOffsets	.map((val, index) => [pathStart.x + index, (halfCanvasHeight - Math.max(val * 0.8 * halfCanvasHeight, Math.ceil(vizMinHeight / 2)))] as const)
-					let reverse = yOffsets.reverse()
-											.map((val, index) => [pathEnd.x   - index, (halfCanvasHeight + Math.max(val * 0.8 * halfCanvasHeight, Math.floor(vizMinHeight / 2)))] as const);
+					let straight: [number, number][] = yOffsets	.map((val, index) => [pathStart.x + index, (halfCanvasHeight - Math.max(val * 0.8 * halfCanvasHeight, Math.ceil(vizMinHeight / 2)))])
+					let reverse: [number, number][] = yOffsets.reverse()
+											.map((val, index) => [pathEnd.x   - index, (halfCanvasHeight + Math.max(val * 0.8 * halfCanvasHeight, Math.floor(vizMinHeight / 2)))]);
 					let points = [...straight, ...reverse];
-
+					let roundTo = 4;
+					pointsForEachCanvas[i] = points.map(point => { return [roundingFunc(point[0], Math.pow(2, roundTo)), roundingFunc(point[1], Math.pow(2, roundTo))] });
 					// if (isPaused)
 					// 	return;
 
-					// poly
+					// // poly
 
 					// polygons[i].setAttribute("points", points.map(p => `${p[0]},${p[1]}`).join(" "));
 
-					// canvas
-					ctx = contexts[i];
-					ctx.clearRect(0,0,dim.width, dim.height)
-					ctx.beginPath();
-					ctx.moveTo(...straight[0]);
-					points.map(([x, y]) => {
-						ctx.lineTo(x,y);
-					})
-					ctx.fillStyle = fillStyles[i];
-					ctx.shadowColor = fillStyles[i] + "7F";
-					ctx.shadowBlur = 20;
-					ctx.closePath();
-					ctx.fill();
+					// // canvas
+					// ctx = contexts[i];
+					// ctx.clearRect(0,0,dim.width, dim.height)
+					// ctx.beginPath();
+					// ctx.moveTo(...straight[0]);
+					// points.map(([x, y]) => {
+					// 	ctx.lineTo(x,y);
+					// })
+					// ctx.fillStyle = fillStyles[i];
+					// ctx.shadowColor = fillStyles[i] + "7F";
+					// ctx.shadowBlur = 20;
+					// ctx.closePath();
+					// ctx.fill();
 					} catch {}
 				},
 				onCanvasResize: undefined,
@@ -117,6 +128,32 @@
 			connectSpeakers = false;
 			audioMotion.push(new AudioMotionAnalyzer(null!, options));
 		}
+		function draw() {
+			for (let i = 0; i < lim; i++) {
+				let points = pointsForEachCanvas[i];
+				let dim = {width: vizWidth, height: vizHeight};
+				
+				{
+					polygons[i].setAttribute("points", points.map(p => `${p[0]},${p[1]}`).join(" "));
+				}
+				{
+					ctx = contexts[i];
+					ctx.clearRect(0,0,dim.width, dim.height)
+					ctx.beginPath();
+					ctx.moveTo(...points[0]);
+					points.map(([x, y]) => {
+						ctx.lineTo(x,y);
+					})
+					ctx.fillStyle = fillStyles[i];
+					ctx.shadowColor = fillStyles[i] + "7F";
+					ctx.shadowBlur = 20;
+					ctx.closePath();
+					ctx.fill();
+				}
+			}
+			requestAnimationFrame(draw);
+		}
+		requestAnimationFrame(draw)
 	})
 
 	$: {
@@ -136,20 +173,20 @@
 				<h3 class="-desc">
 					Our in-house sound team will provide you with the best sonic experience.
 				</h3>
-				<div class="-player flex gap-2 h-24">
+				<div class="-player flex gap-2 items-stretch h-24">
 					<audio controls={false} src={path.join(assetsDir, "audio", "den_soundspace.wav")} id="music" bind:this={player} bind:paused={isPaused}></audio>
-					<button class="-playpause w-20 h-20 rounded-full cursor-default" on:click={() => { isPaused = !isPaused;}}>
+					<button class="-playpause w-20 h-20 rounded-full cursor-default self-center" on:click={() => { isPaused = !isPaused;}}>
 						<PausePlayButton class="w-full h-full [&_>*]:cursor-pointer" paused={isPaused}></PausePlayButton>
 					</button>
 					<div class="-visualizer relative grow" bind:clientWidth={vizWidth} bind:clientHeight={vizHeight}>
 						{#each {length: lim} as _, i}
 							<canvas class="-vizcanvas absolute top-0 left-0 dim-full [mix-blend-mode:screen]" width="{vizWidth}px" height="{vizHeight}px" style="translate: 0 {vizHeight * 0}px; width: {vizWidth}px; height: {vizHeight}px" bind:this={canvases[i]}></canvas>
 						{/each}
-						<!-- <svg class="absolute top-0 left-0 w-full" style={`translate: 0 ${vizHeight * 1}px`}>
+						<svg class="absolute top-0 left-0 w-full" style={`translate: 0 ${vizHeight * 1}px`}>
 							{#each {length: lim} as _, i}
 								<polygon class="-vizpoly  max-w-full " style={`mix-blend-mode: screen; filter: drop-shadow(0px 0px 10px ${fillStyles[i]}${Math.floor(0.5 * 255).toString(16)})`} bind:this={polygons[i]} fill={fillStyles[i]}></polygon>
 							{/each}
-						</svg> -->
+						</svg>
 					</div>
 				</div>
 			</div>

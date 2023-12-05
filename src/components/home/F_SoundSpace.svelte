@@ -49,9 +49,15 @@
 		return [];
 	});
 	let updateData = 0;
+	let _updateData = 0;
+	let fps = 0;
+	let _fps = 0;
 	setInterval(() => {
-		console.log({updateData});
-		updateData = 0;
+		// console.log({updateData});
+		updateData = _updateData;
+		fps = _fps;
+		_fps = 0;
+		_updateData = 0;
 	}, 1000)
 	onMount(() => {
 		let audioMotion: AudioMotionAnalyzer[] = [];
@@ -72,7 +78,7 @@
 				mode: 10,
 				onCanvasDraw: (instance: AudioMotionAnalyzer) => {
 					if (i === 0) {
-						updateData++;
+						_updateData++;
 					}
 					try {
 					let bars = instance.getBars();
@@ -132,7 +138,9 @@
 			for (let i = 0; i < lim; i++) {
 				let points = pointsForEachCanvas[i];
 				let dim = {width: vizWidth, height: vizHeight};
-				
+				if (i === 0) {
+					_fps++;
+				}
 				{
 					polygons[i].setAttribute("points", points.map(p => `${p[0]},${p[1]}`).join(" "));
 				}
@@ -173,6 +181,7 @@
 				<h3 class="-desc">
 					Our in-house sound team will provide you with the best sonic experience.
 				</h3>
+				<div class="-data">fps: {fps}, updateData: {updateData}</div>
 				<div class="-player flex gap-2 items-stretch h-24">
 					<audio controls={false} src={path.join(assetsDir, "audio", "den_soundspace.wav")} id="music" bind:this={player} bind:paused={isPaused}></audio>
 					<button class="-playpause w-20 h-20 rounded-full cursor-default self-center" on:click={() => { isPaused = !isPaused;}}>

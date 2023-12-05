@@ -8,11 +8,14 @@
 	import Spline from 'typescript-cubic-spline';
 	import gsap from "gsap-trial";
 	import * as _gsap from "gsap-trial";
+	import dataJson from "./data.json";
 
 	let player: HTMLAudioElement | undefined;
 	let vizRef: HTMLDivElement | undefined;
-	let vizWidth: number = 0;
-	let vizHeight: number = 0;
+	let _vizWidth: number = 0;
+	let _vizHeight: number = 0;
+	let vizWidth: number = 240;
+	let vizHeight: number = 96;
 	let isPaused: boolean = true;
 	let isPaused2: boolean = true;
 	let canvases: HTMLCanvasElement[] = [];
@@ -66,98 +69,103 @@
 	}, 1000)
 	let contexts: CanvasRenderingContext2D[];
 	onMount(() => {
-		let audioMotion: AudioMotionAnalyzer[] = [];
-		let connectSpeakers = true;
-		let ctx: CanvasRenderingContext2D;
+		// let audioMotion: AudioMotionAnalyzer[] = [];
+		// let connectSpeakers = true;
+		// let ctx: CanvasRenderingContext2D;
 		contexts = canvases.map((canvas) => {
 			return canvas.getContext("2d")!
 		});
-		for (let i = 0; i < lim; i++) {
-			let options: ConstructorOptions = {
-				source: !i ? player : audioMotion[0].connectedSources[0],
-				connectSpeakers,
-				frequencyScale: "linear",
-				maxDecibels: vizData[i].maxDec,
-				minDecibels: vizData[i].minDec,
-				maxFreq: useStep ? minFreq + (i + 1) * freqStep : minFreq + (i + 1) * (maxFreq - minFreq) / (lim + 1),
-				minFreq: useStep ? minFreq + i * freqStep : minFreq + i * (maxFreq - minFreq) / (lim + 1),
-				mode: 10,
-				onCanvasDraw: (instance: AudioMotionAnalyzer) => {
-					if (isPaused) return;
-					if (i === 0) {
-						_updateData++;
-					}
-					try {
-					let bars = instance.getBars();
-					let barX = [...Array.from(Array(bars.length).keys()), bars.length, bars.length + 1];
-					let barY = [0, ...bars.map(bar => bar.value[0]), 0];
-					let spline = new Spline(barX, barY);
-					let dim = {width: vizWidth, height: vizHeight};
-					let barSpace = dim.width / (bars.length + 3);
-					let minSideSpacesWidth = 10;
-					let pathStart = {x: Math.max(barSpace, minSideSpacesWidth), y: dim.height / 2};
-					let pathEnd = {x: dim.width - Math.max(barSpace, minSideSpacesWidth), y: dim.height / 2};
-					let vizLineWidth = pathEnd.x - pathStart.x;
-					let yOffsets: number[] = [];
-					for (let x = 0; x < vizLineWidth; x++) {
-						yOffsets.push(spline.at((x * (bars.length + 1)) / vizLineWidth));
-					}
-					let vizMinHeight = 1;
-					let halfCanvasHeight = dim.height / 2;
-					let straight: [number, number][] = yOffsets	.map((val, index) => [pathStart.x + index, (halfCanvasHeight - Math.max(val * 0.8 * halfCanvasHeight, Math.ceil(vizMinHeight / 2)))])
-					let reverse: [number, number][] = yOffsets.reverse()
-											.map((val, index) => [pathEnd.x   - index, (halfCanvasHeight + Math.max(val * 0.8 * halfCanvasHeight, Math.floor(vizMinHeight / 2)))]);
-					let points = [...straight, ...reverse];
-					let roundTo = 4;
-					// console.log("test1")
-					points = points.map(point => { return [roundingFunc(point[0], Math.pow(2, roundTo)), roundingFunc(point[1], Math.pow(2, roundTo))] });
-					// console.log("test2")
-					pointsForEachCanvas[i] = points;
-					// console.log("test3")
-					// pointsForEachCanvasForEachFrame[i] = [...pointsForEachCanvasForEachFrame[i], points];
-					// console.log(`: ${[pointsForEachCanvasForEachFrame[i], points]}`)
-					if (!isPaused) {
-						// console.log(pointsForEachCanvasForEachFrame)
-						// console.log(pointsForEachCanvasForEachFrame[i])
-						pointsForEachCanvasForEachFrame[i].push(points);
-					}
-					// console.log("test4")
-					// if (isPaused)
-					// 	return;
+		// for (let i = 0; i < lim; i++) {
+		// 	let options: ConstructorOptions = {
+		// 		source: !i ? player : audioMotion[0].connectedSources[0],
+		// 		connectSpeakers,
+		// 		frequencyScale: "linear",
+		// 		maxDecibels: vizData[i].maxDec,
+		// 		minDecibels: vizData[i].minDec,
+		// 		maxFreq: useStep ? minFreq + (i + 1) * freqStep : minFreq + (i + 1) * (maxFreq - minFreq) / (lim + 1),
+		// 		minFreq: useStep ? minFreq + i * freqStep : minFreq + i * (maxFreq - minFreq) / (lim + 1),
+		// 		mode: 10,
+		// 		onCanvasDraw: (instance: AudioMotionAnalyzer) => {
+		// 			if (isPaused) return;
+		// 			if (i === 0) {
+		// 				_updateData++;
+		// 			}
+		// 			try {
+		// 			let bars = instance.getBars();
+		// 			let barX = [...Array.from(Array(bars.length).keys()), bars.length, bars.length + 1];
+		// 			let barY = [0, ...bars.map(bar => bar.value[0]), 0];
+		// 			let spline = new Spline(barX, barY);
+		// 			let dim = {width: vizWidth, height: vizHeight};
+		// 			let barSpace = dim.width / (bars.length + 3);
+		// 			let minSideSpacesWidth = 10;
+		// 			let pathStart = {x: Math.max(barSpace, minSideSpacesWidth), y: dim.height / 2};
+		// 			let pathEnd = {x: dim.width - Math.max(barSpace, minSideSpacesWidth), y: dim.height / 2};
+		// 			let vizLineWidth = pathEnd.x - pathStart.x;
+		// 			let yOffsets: number[] = [];
+		// 			for (let x = 0; x < vizLineWidth; x++) {
+		// 				yOffsets.push(spline.at((x * (bars.length + 1)) / vizLineWidth));
+		// 			}
+		// 			let vizMinHeight = 1;
+		// 			let halfCanvasHeight = dim.height / 2;
+		// 			let straight: [number, number][] = yOffsets	.map((val, index) => [pathStart.x + index, (halfCanvasHeight - Math.max(val * 0.8 * halfCanvasHeight, Math.ceil(vizMinHeight / 2)))])
+		// 			let reverse: [number, number][] = yOffsets.reverse()
+		// 									.map((val, index) => [pathEnd.x   - index, (halfCanvasHeight + Math.max(val * 0.8 * halfCanvasHeight, Math.floor(vizMinHeight / 2)))]);
+		// 			let points = [...straight, ...reverse];
+		// 			let roundTo = 4;
+		// 			// console.log("test1")
+		// 			points = points.map(point => { return [roundingFunc(point[0], Math.pow(2, roundTo)), roundingFunc(point[1], Math.pow(2, roundTo))] });
+		// 			// console.log("test2")
+		// 			pointsForEachCanvas[i] = points;
+		// 			// console.log("test3")
+		// 			// pointsForEachCanvasForEachFrame[i] = [...pointsForEachCanvasForEachFrame[i], points];
+		// 			// console.log(`: ${[pointsForEachCanvasForEachFrame[i], points]}`)
+		// 			if (!isPaused) {
+		// 				// console.log(pointsForEachCanvasForEachFrame[i])
+		// 				// console.log(JSON.stringify({l: pointsForEachCanvasForEachFrame[i][0].length}))
+		// 				// console.log(JSON.stringify({l: [1,2,3].length}))
+		// 				pointsForEachCanvasForEachFrame[i].push(points);
+		// 				// console.log(pointsForEachCanvasForEachFrame[i])
+		// 			}
+		// 			// console.log("test4")
+		// 			// if (isPaused)
+		// 			// 	return;
 
-					// // poly
+		// 			// // poly
 
-					// polygons[i].setAttribute("points", points.map(p => `${p[0]},${p[1]}`).join(" "));
+		// 			// polygons[i].setAttribute("points", points.map(p => `${p[0]},${p[1]}`).join(" "));
 
-					// // canvas
-					// ctx = contexts[i];
-					// ctx.clearRect(0,0,dim.width, dim.height)
-					// ctx.beginPath();
-					// ctx.moveTo(...straight[0]);
-					// points.map(([x, y]) => {
-					// 	ctx.lineTo(x,y);
-					// })
-					// ctx.fillStyle = fillStyles[i];
-					// ctx.shadowColor = fillStyles[i] + "7F";
-					// ctx.shadowBlur = 20;
-					// ctx.closePath();
-					// ctx.fill();
-					} catch {}
-				},
-				onCanvasResize: undefined,
-				smoothing: 0.8,
-				useCanvas: false,
-				volume: 1,
-				weightingFilter: "",
-			}
-			connectSpeakers = false;
-			audioMotion.push(new AudioMotionAnalyzer(null!, options));
-		}
+		// 			// // canvas
+		// 			// ctx = contexts[i];
+		// 			// ctx.clearRect(0,0,dim.width, dim.height)
+		// 			// ctx.beginPath();
+		// 			// ctx.moveTo(...straight[0]);
+		// 			// points.map(([x, y]) => {
+		// 			// 	ctx.lineTo(x,y);
+		// 			// })
+		// 			// ctx.fillStyle = fillStyles[i];
+		// 			// ctx.shadowColor = fillStyles[i] + "7F";
+		// 			// ctx.shadowBlur = 20;
+		// 			// ctx.closePath();
+		// 			// ctx.fill();
+		// 			} catch {}
+		// 		},
+		// 		onCanvasResize: undefined,
+		// 		smoothing: 0.8,
+		// 		useCanvas: false,
+		// 		volume: 1,
+		// 		weightingFilter: "",
+		// 	}
+		// 	connectSpeakers = false;
+		// 	audioMotion.push(new AudioMotionAnalyzer(null!, options));
+		// }
 	})
 	
 	// $: console.log({pointsForEachCanvasForEachFrame: pointsForEachCanvasForEachFrame[0]});
 
 	onMount(() => {
+		console.log({dataJson})
+		// @ts-ignore
+		pointsForEachCanvasForEachFrame = dataJson;
 		let frame = 0;
 		const targetFrameRate = 60;
 		setInterval(() => {
@@ -227,6 +235,7 @@
 				<div class="-player flex gap-2 items-stretch h-24">
 					<audio controls={false} src={path.join(assetsDir, "audio", "den_soundspace.wav")} id="music" bind:this={player} bind:paused={isPaused}></audio>
 					<div class="-inner flex flex-col">
+						<button on:click={() => { console.log(JSON.stringify(pointsForEachCanvasForEachFrame)) }}>get data</button>
 						<button class="-playpause w-20 h-20 rounded-full cursor-default self-center" on:click={() => { isPaused = !isPaused;}}>
 							<PausePlayButton class="w-full h-full [&_>*]:cursor-pointer" paused={isPaused}></PausePlayButton>
 						</button>
@@ -234,7 +243,7 @@
 							<PausePlayButton class="w-full h-full [&_>*]:cursor-pointer" paused={isPaused2}></PausePlayButton>
 						</button>
 					</div>
-					<div class="-visualizer relative grow" bind:clientWidth={vizWidth} bind:clientHeight={vizHeight}>
+					<div class="-visualizer relative grow" bind:clientWidth={_vizWidth} bind:clientHeight={_vizHeight}>
 						{#each {length: lim} as _, i}
 							<canvas class="-vizcanvas absolute top-0 left-0 dim-full [mix-blend-mode:screen]" width="{vizWidth}px" height="{vizHeight}px" style="translate: 0 {vizHeight * 0}px; width: {vizWidth}px; height: {vizHeight}px" bind:this={canvases[i]}></canvas>
 						{/each}

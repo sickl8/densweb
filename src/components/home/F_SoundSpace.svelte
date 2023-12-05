@@ -223,7 +223,7 @@
 				<h3 class="-desc">
 					Our in-house sound team will provide you with the best sonic experience.
 				</h3>
-				<div class="-data">fps: {fps}, updateData: {updateData}</div>
+				<div class="-data">fps: {fps}, updateData: {updateData}, vizDim: {JSON.stringify({vizWidth, vizHeight})}</div>
 				<div class="-player flex gap-2 items-stretch h-24">
 					<audio controls={false} src={path.join(assetsDir, "audio", "den_soundspace.wav")} id="music" bind:this={player} bind:paused={isPaused}></audio>
 					<div class="-inner flex flex-col">

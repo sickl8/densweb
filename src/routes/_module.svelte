@@ -42,7 +42,7 @@
 
 <svelte:window bind:scrollY={scrollY}></svelte:window>
 
-<Particles />
+<!-- <Particles /> -->
 <Navbar />
 <div class="-global-wrapper overflow-hidden">
 	<main class="w-full h-full">

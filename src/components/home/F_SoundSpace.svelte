@@ -4,7 +4,7 @@
 	import path from "path-browserify";
 	import { assetsDir } from "src/lib/utils";
 	import { onMount } from "svelte";
-	import AudioMotionAnalyzer, { type ConstructorOptions } from "audiomotion-analyzer";
+	import AudioMotionAnalyzer, { type ConstructorOptions } from "./audiomotion";
 	import Spline from 'typescript-cubic-spline';
 	import gsap from "gsap-trial";
 	import * as _gsap from "gsap-trial";
@@ -57,6 +57,12 @@
 			maxFreq: minFreq + lim * freqStep,
 			minFreq: minFreq,
 			mode: 10,
+			// fftSize: Math.pow(2, 10),
+			onCanvasResize: undefined,
+			smoothing: 0.8,
+			useCanvas: false,
+			volume: 1,
+			weightingFilter: "",
 			onCanvasDraw: (instance: AudioMotionAnalyzer) => {
 				// const dpr = Math.max(devicePixelRatio, 1);
 				const dpr = devicePixelRatio;
@@ -67,8 +73,6 @@
 				mainCanvas.width = dim.w;
 				mainCanvas.height = dim.h;
 				let data = instance.getBars();
-				// console.log(data.length);
-				// console.log({x: instance.maxFreq, n: instance.minFreq})
 				for (let i = 0; i < lim; i++) {
 					try {
 					let bars = data.slice(i * data.length / lim, (i + 1) * data.length / lim);
@@ -76,7 +80,7 @@
 					let barY = [0, ...bars.map(bar => bar.value[0]), 0];
 					let spline = new Spline(barX, barY);
 					let barSpace = dim.w / (bars.length + 3);
-					let minSideSpacesWidth = 10;
+					let minSideSpacesWidth = 20;
 					let pathStart = {x: Math.max(barSpace, minSideSpacesWidth), y: dim.h / 2};
 					let pathEnd = {x: dim.w - Math.max(barSpace, minSideSpacesWidth), y: dim.h / 2};
 					let vizLineWidth = pathEnd.x - pathStart.x;
@@ -107,11 +111,6 @@
 					} catch {}
 				}
 			},
-			onCanvasResize: undefined,
-			smoothing: 0.8,
-			useCanvas: false,
-			volume: 1,
-			weightingFilter: "",
 		}
 		let audioMotion = new AudioMotionAnalyzer(undefined, options);
 	})

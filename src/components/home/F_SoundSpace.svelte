@@ -50,6 +50,7 @@
 	let randomValueFrame = 0;
 	let timePerCanvasFrame = 0;
 	let data: AnalyzerBarData[] = [];
+	let dataClone: number[] = [];
 	let dataArray: Float32Array[] = []
 	let audioMotion: AudioMotionAnalyzer;
 	onMount(() => {
@@ -72,6 +73,7 @@
 			weightingFilter: "",
 			onCanvasDraw: (instance: AudioMotionAnalyzer) => {
 				data = instance.getBars();
+				dataClone = JSON.parse(JSON.stringify(data.map(d => d.value[0])));
 				// if (!isPaused)
 				// 	dataArray.push(new Float32Array(data.map(d => d.value[0])));
 				randomValueFrame = data[Math.round(Math.random() * (data.length - 1))].value[0];
@@ -92,10 +94,10 @@
 			fpsCounter = 0;
 		}, 500)
 		setInterval(() => {
-			requestAnimationFrame(draw);
 		}, 1000 / 60)
 		function draw() {
 			fpsCounter++;
+			requestAnimationFrame(draw);
 			// requestAnimationFrame(draw)
 			// const dpr = Math.max(devicePixelRatio, 1);
 			const dpr = devicePixelRatio;
@@ -108,7 +110,8 @@
 			// if (mainCanvas.height !== dim.h)
 			mainCanvas.height = dim.h;
 			timePerCanvasFrame = performance.now();
-			let thisData = dataArray[frame];
+			// let thisData = dataArray[frame];
+			let thisData: number[] = JSON.parse(JSON.stringify(dataClone));
 			// console.log({frame, thisData, "dataArray.length": dataArray.length});
 			// try { console.log({thisData0: thisData[0].value[0]})} catch {}
 			for (let i = 0; i < lim; i++) {

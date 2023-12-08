@@ -159,7 +159,7 @@
 	})
 </script>
 
-<section class="w-full min-h-[calc(100svh-5rem)] flex flex-col items-center justify-start">
+<section class="w-full min-h-[calc((100svh-5rem)*2)] flex flex-col items-center justify-start">
 	<div class="-shell flex flex-col w-full grow">
 		<div class="pb-1.5">
 			<div class="-redribon h-2 bg-torch-red-base"></div>

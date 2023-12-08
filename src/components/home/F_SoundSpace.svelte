@@ -179,7 +179,7 @@
 					canvasFramesPs: {fps.toFixed(2)}<br/>
 					frame: {frame}<br/>
 				</div>
-				<div class="-player flex gap-2 items-stretch h-24">
+				<div class="-player flex gap-2 items-stretch min-h-fit -h-24">
 					<audio controls={false} src={path.join(assetsDir, "audio", "den_soundspace.wav")} id="music" bind:this={player} bind:paused={isPaused}></audio>
 					<div class="-buttons flex flex-col h-fit">
 						<button class="bg-gray-300 text-black text-sm p-2 rounded border border-gray-700" on:click={() => { audioMotion.destroy(); }}>destroy analyser</button>
@@ -189,12 +189,14 @@
 							anchor.download = 'data.bin'
 							anchor.click();
 						}}>dump data array</button>
-						<button class="-playpause w-20 h-20 basis-20 rounded-full cursor-default self-center" on:click={() => { isPaused = !isPaused;}}>
+						<button class="bg-gray-300 text-black text-sm p-2 rounded border border-gray-700" on:click={() => { isPaused = !isPaused;}}>isPaused: {isPaused}</button>
+						<button class="bg-gray-300 text-black text-sm p-2 rounded border border-gray-700" on:click={() => { isPaused2 = !isPaused2;}}>isPaused2: {isPaused2}</button>
+						<!-- <button class="-playpause w-20 h-20 basis-20 rounded-full cursor-default self-center" on:click={() => { isPaused = !isPaused;}}>
 							<PausePlayButton class="w-full h-full [&_>*]:cursor-pointer" paused={isPaused}></PausePlayButton>
 						</button>
 						<button class="-playpause w-20 h-20 basis-20 rounded-full cursor-default self-center" on:click={() => { isPaused2 = !isPaused2;}}>
 							<PausePlayButton class="w-full h-full [&_>*]:cursor-pointer" paused={isPaused2}></PausePlayButton>
-						</button>
+						</button> -->
 					</div>
 					<div class="-visualizer relative grow" bind:clientWidth={vizWidth} bind:clientHeight={vizHeight}>
 						<canvas class="-vizcanvas absolute top-0 left-0 dim-full [mix-blend-mode:screen]" width="{vizWidth * devicePixelRatio}px" height="{vizHeight * devicePixelRatio}px" style="translate: 0 {vizHeight * 0}px; width: {vizWidth}px; height: {vizHeight}px" bind:this={mainCanvas}></canvas>

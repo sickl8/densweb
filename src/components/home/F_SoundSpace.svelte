@@ -85,9 +85,9 @@
 		setInterval(() => {
 			fps = fpsCounter * 2;
 			fpsCounter = 0;
-
 		}, 500)
 		function draw() {
+			fpsCounter++;
 			requestAnimationFrame(draw)
 			// const dpr = Math.max(devicePixelRatio, 1);
 			const dpr = devicePixelRatio;
@@ -159,7 +159,8 @@
 					audioRendersPs: {audioRendersPs.toFixed(2)}<br/>
 					randomValueFrame: {randomValueFrame.toFixed(2)}<br/>
 					timePerCanvasFrame: {timePerCanvasFrame.toFixed(2)}ms<br/>
-					canvasFramesPs: {(1000 / timePerCanvasFrame).toFixed(2)}
+					canvasPossibleFramesPs: {(1000 / timePerCanvasFrame).toFixed(2)}<br/>
+					canvasFramesPs: {fps.toFixed(2)}<br/>
 				</div>
 				<div class="-player flex gap-2 items-stretch h-24">
 					<audio controls={false} src={path.join(assetsDir, "audio", "den_soundspace.wav")} id="music" bind:this={player} bind:paused={isPaused}></audio>

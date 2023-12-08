@@ -95,9 +95,9 @@
 			ctx.resetTransform();
 			ctx.scale(dpr, dpr);
 			ctx.clearRect(0, 0, dim.w, dim.h);
-			if (mainCanvas.width !== dim.w)
+			// if (mainCanvas.width !== dim.w)
 				mainCanvas.width = dim.w;
-			if (mainCanvas.height !== dim.h)
+			// if (mainCanvas.height !== dim.h)
 				mainCanvas.height = dim.h;
 			timePerCanvasFrame = performance.now();
 			for (let i = 0; i < lim; i++) {

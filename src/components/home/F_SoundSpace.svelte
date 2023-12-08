@@ -7,7 +7,6 @@
 	import AudioMotionAnalyzer, { type ConstructorOptions } from "./audiomotion";
 	import Spline from 'typescript-cubic-spline';
 	import gsap from "gsap-trial";
-	import dataJson from "./data.json";
 	import * as _gsap from "gsap-trial";
 
 	let player: HTMLAudioElement | undefined;
@@ -47,71 +46,12 @@
 	function roundingFunc(num: number, by = 4) {
 		return Math.round(num * by) / by;
 	}
+	let audioRendersPs = 0;
+	let randomValueFrame = 0;
 	onMount(() => {
 		let ctx = mainCanvas.getContext("2d")!;
-		let frame = 0;
-		function draw() {
-			if (frame > dataJson[0].length) {
-				frame = 0;
-				isPaused2 = true;
-			}
-			requestAnimationFrame(draw);
-			const dpr = devicePixelRatio;
-			const dim = {w: vizWidth * dpr, h: vizHeight * dpr};
-			ctx.resetTransform();
-			ctx.scale(dpr, dpr);
-			ctx.clearRect(0, 0, dim.w, dim.h);
-			mainCanvas.width = dim.w;
-			mainCanvas.height = dim.h;
-			// let data = instance.getBars();
-			for (let i = 0; i < lim; i++) {
-				try {
-				// let bars = data.slice(i * data.length / lim, (i + 1) * data.length / lim);
-				// let bars = data.slice(i * data.length / lim, (i + 1) * data.length / lim);
-				// let barX = [...Array.from(Array(bars.length).keys()), bars.length, bars.length + 1];
-				// let barY = [0, ...bars.map(bar => bar.value[0]), 0];
-				// let spline = new Spline(barX, barY);
-				// let barSpace = dim.w / (bars.length + 3);
-				// let minSideSpacesWidth = 20;
-				// let pathStart = {x: Math.max(barSpace, minSideSpacesWidth), y: dim.h / 2};
-				// let pathEnd = {x: dim.w - Math.max(barSpace, minSideSpacesWidth), y: dim.h / 2};
-				// let vizLineWidth = pathEnd.x - pathStart.x;
-				// let yOffsets: number[] = [];
-				// for (let x = 0; x < vizLineWidth; x++) {
-				// 	yOffsets.push(spline.at((x * (bars.length + 1)) / vizLineWidth));
-				// }
-				// let vizMinHeight = 1;
-				// let halfCanvasHeight = dim.h / 2;
-				// let straight: [number, number][] = yOffsets	.map((val, index) => [pathStart.x + index, (halfCanvasHeight - Math.max(val * 0.8 * halfCanvasHeight, Math.ceil(vizMinHeight / 2)))])
-				// let reverse: [number, number][] = yOffsets.reverse()
-				// 						.map((val, index) => [pathEnd.x   - index, (halfCanvasHeight + Math.max(val * 0.8 * halfCanvasHeight, Math.floor(vizMinHeight / 2)))]);
-				// let points = [...straight, ...reverse];
-				// let roundTo = 4;
-				// points = points.map(point => { return [roundingFunc(point[0], Math.pow(2, roundTo)), roundingFunc(point[1], Math.pow(2, roundTo))] });
-				// @ts-ignore
-				let points: [number, number][] = dataJson[i][frame];
-				// console.log({points, zero: points[0]})
-				// // canvas
-				ctx.globalCompositeOperation = "screen";
-				ctx.beginPath();
-				ctx.moveTo(...points[0]);
-				points.forEach((point) => {
-					// console.log(point)
-					ctx.lineTo(...point);
-				})
-				// console.log({})
-				ctx.fillStyle = fillStyles[i];
-				ctx.shadowColor = fillStyles[i] + "7F";
-				ctx.shadowBlur = 20;
-				ctx.closePath();
-				ctx.fill();
-				} catch {}
-			}
-			if (!isPaused2) {
-				frame++;
-			}
-		}
-		draw();
+		let nAudioRenders = 0;
+		let audioStartTime = performance.now();
 		let options: ConstructorOptions = {
 			source: player,
 			connectSpeakers: true,
@@ -127,54 +67,59 @@
 			useCanvas: false,
 			volume: 1,
 			weightingFilter: "",
-			// onCanvasDraw: (instance: AudioMotionAnalyzer) => {
-			// 	// const dpr = Math.max(devicePixelRatio, 1);
-			// 	const dpr = devicePixelRatio;
-			// 	const dim = {w: vizWidth * dpr, h: vizHeight * dpr};
-			// 	ctx.resetTransform();
-			// 	ctx.scale(dpr, dpr);
-			// 	ctx.clearRect(0, 0, dim.w, dim.h);
-			// 	mainCanvas.width = dim.w;
-			// 	mainCanvas.height = dim.h;
-			// 	let data = instance.getBars();
-			// 	for (let i = 0; i < lim; i++) {
-			// 		try {
-			// 		let bars = data.slice(i * data.length / lim, (i + 1) * data.length / lim);
-			// 		let barX = [...Array.from(Array(bars.length).keys()), bars.length, bars.length + 1];
-			// 		let barY = [0, ...bars.map(bar => bar.value[0]), 0];
-			// 		let spline = new Spline(barX, barY);
-			// 		let barSpace = dim.w / (bars.length + 3);
-			// 		let minSideSpacesWidth = 20;
-			// 		let pathStart = {x: Math.max(barSpace, minSideSpacesWidth), y: dim.h / 2};
-			// 		let pathEnd = {x: dim.w - Math.max(barSpace, minSideSpacesWidth), y: dim.h / 2};
-			// 		let vizLineWidth = pathEnd.x - pathStart.x;
-			// 		let yOffsets: number[] = [];
-			// 		for (let x = 0; x < vizLineWidth; x++) {
-			// 			yOffsets.push(spline.at((x * (bars.length + 1)) / vizLineWidth));
-			// 		}
-			// 		let vizMinHeight = 1;
-			// 		let halfCanvasHeight = dim.h / 2;
-			// 		let straight: [number, number][] = yOffsets	.map((val, index) => [pathStart.x + index, (halfCanvasHeight - Math.max(val * 0.8 * halfCanvasHeight, Math.ceil(vizMinHeight / 2)))])
-			// 		let reverse: [number, number][] = yOffsets.reverse()
-			// 								.map((val, index) => [pathEnd.x   - index, (halfCanvasHeight + Math.max(val * 0.8 * halfCanvasHeight, Math.floor(vizMinHeight / 2)))]);
-			// 		let points = [...straight, ...reverse];
-			// 		let roundTo = 4;
-			// 		points = points.map(point => { return [roundingFunc(point[0], Math.pow(2, roundTo)), roundingFunc(point[1], Math.pow(2, roundTo))] });
-			// 		// // canvas
-			// 		ctx.globalCompositeOperation = "screen";
-			// 		ctx.beginPath();
-			// 		ctx.moveTo(...points[0]);
-			// 		points.forEach((point) => {
-			// 			ctx.lineTo(...point);
-			// 		})
-			// 		ctx.fillStyle = fillStyles[i];
-			// 		ctx.shadowColor = fillStyles[i] + "7F";
-			// 		ctx.shadowBlur = 20;
-			// 		ctx.closePath();
-			// 		ctx.fill();
-			// 		} catch {}
-			// 	}
-			// },
+			onCanvasDraw: (instance: AudioMotionAnalyzer) => {
+				// const dpr = Math.max(devicePixelRatio, 1);
+				const dpr = devicePixelRatio;
+				const dim = {w: vizWidth * dpr, h: vizHeight * dpr};
+				ctx.resetTransform();
+				ctx.scale(dpr, dpr);
+				ctx.clearRect(0, 0, dim.w, dim.h);
+				mainCanvas.width = dim.w;
+				mainCanvas.height = dim.h;
+				let data = instance.getBars();
+				randomValueFrame = data[Math.round(Math.random() * (data.length - 1))].value[0];
+				let now = performance.now();
+				audioRendersPs = nAudioRenders / ((now - audioStartTime) / 1000);
+				nAudioRenders++;
+
+				// for (let i = 0; i < lim; i++) {
+				// 	try {
+				// 	let bars = data.slice(i * data.length / lim, (i + 1) * data.length / lim);
+				// 	let barX = [...Array.from(Array(bars.length).keys()), bars.length, bars.length + 1];
+				// 	let barY = [0, ...bars.map(bar => bar.value[0]), 0];
+				// 	let spline = new Spline(barX, barY);
+				// 	let barSpace = dim.w / (bars.length + 3);
+				// 	let minSideSpacesWidth = 20;
+				// 	let pathStart = {x: Math.max(barSpace, minSideSpacesWidth), y: dim.h / 2};
+				// 	let pathEnd = {x: dim.w - Math.max(barSpace, minSideSpacesWidth), y: dim.h / 2};
+				// 	let vizLineWidth = pathEnd.x - pathStart.x;
+				// 	let yOffsets: number[] = [];
+				// 	for (let x = 0; x < vizLineWidth; x++) {
+				// 		yOffsets.push(spline.at((x * (bars.length + 1)) / vizLineWidth));
+				// 	}
+				// 	let vizMinHeight = 1;
+				// 	let halfCanvasHeight = dim.h / 2;
+				// 	let straight: [number, number][] = yOffsets	.map((val, index) => [pathStart.x + index, (halfCanvasHeight - Math.max(val * 0.8 * halfCanvasHeight, Math.ceil(vizMinHeight / 2)))])
+				// 	let reverse: [number, number][] = yOffsets.reverse()
+				// 							.map((val, index) => [pathEnd.x   - index, (halfCanvasHeight + Math.max(val * 0.8 * halfCanvasHeight, Math.floor(vizMinHeight / 2)))]);
+				// 	let points = [...straight, ...reverse];
+				// 	let roundTo = 4;
+				// 	points = points.map(point => { return [roundingFunc(point[0], Math.pow(2, roundTo)), roundingFunc(point[1], Math.pow(2, roundTo))] });
+				// 	// // canvas
+				// 	ctx.globalCompositeOperation = "screen";
+				// 	ctx.beginPath();
+				// 	ctx.moveTo(...points[0]);
+				// 	points.forEach((point) => {
+				// 		ctx.lineTo(...point);
+				// 	})
+				// 	ctx.fillStyle = fillStyles[i];
+				// 	ctx.shadowColor = fillStyles[i] + "7F";
+				// 	ctx.shadowBlur = 20;
+				// 	ctx.closePath();
+				// 	ctx.fill();
+				// 	} catch {}
+				// }
+			},
 		}
 		let audioMotion = new AudioMotionAnalyzer(undefined, options);
 	})
@@ -192,13 +137,14 @@
 				<h3 class="-desc">
 					Our in-house sound team will provide you with the best sonic experience.
 				</h3>
+				<div class="-stats">
+					audioRendersPs: {audioRendersPs} <br/>
+					randomValueFrame: {randomValueFrame}
+				</div>
 				<div class="-player flex gap-2 items-stretch h-24">
 					<audio controls={false} src={path.join(assetsDir, "audio", "den_soundspace.wav")} id="music" bind:this={player} bind:paused={isPaused}></audio>
 					<button class="-playpause w-20 h-20 rounded-full cursor-default self-center" on:click={() => { isPaused = !isPaused;}}>
 						<PausePlayButton class="w-full h-full [&_>*]:cursor-pointer" paused={isPaused}></PausePlayButton>
-					</button>
-					<button class="-playpause w-20 h-20 rounded-full cursor-default self-center" on:click={() => { isPaused2 = !isPaused2;}}>
-						<PausePlayButton class="w-full h-full [&_>*]:cursor-pointer" paused={isPaused2}></PausePlayButton>
 					</button>
 					<div class="-visualizer relative grow" bind:clientWidth={vizWidth} bind:clientHeight={vizHeight}>
 						<canvas class="-vizcanvas absolute top-0 left-0 dim-full [mix-blend-mode:screen]" width="{vizWidth * devicePixelRatio}px" height="{vizHeight * devicePixelRatio}px" style="translate: 0 {vizHeight * 0}px; width: {vizWidth}px; height: {vizHeight}px" bind:this={mainCanvas}></canvas>

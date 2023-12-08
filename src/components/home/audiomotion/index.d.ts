@@ -9,6 +9,7 @@ export type CanvasDrawInfo = {
 }
 
 export const getOpTime: Writable<number>;
+export const drawOpTime: Writable<number>;
 
 export type OnCanvasResizeFunction = (
 	reason: CanvasResizeReason,

@@ -4,7 +4,7 @@
 	import path from "path-browserify";
 	import { assetsDir } from "src/lib/utils";
 	import { onMount } from "svelte";
-	import AudioMotionAnalyzer, { getOpTime, type AnalyzerBarData, type ConstructorOptions } from "./audiomotion";
+	import AudioMotionAnalyzer, { getOpTime, type AnalyzerBarData, type ConstructorOptions, drawOpTime } from "./audiomotion";
 	import Spline from 'typescript-cubic-spline';
 	import gsap from "gsap-trial";
 	import * as _gsap from "gsap-trial";
@@ -199,6 +199,7 @@
 					unique: {unique}<br/>
 					duplicate: {duplicate}<br/>
 					getOpTime: {$getOpTime.toFixed(2)}<br/>
+					drawOpTime: {$drawOpTime.toFixed(2)}<br/>
 				</div>
 				<div class="-player flex gap-2 items-stretch min-h-fit -h-24">
 					<audio controls={false} src={path.join(assetsDir, "audio", "den_soundspace.wav")} id="music" bind:this={player} bind:paused={isPaused}></audio>

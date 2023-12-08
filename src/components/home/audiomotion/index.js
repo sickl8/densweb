@@ -12,6 +12,7 @@
 import { writable } from "svelte/store";
 
 export const getOpTime = writable(0);
+export const drawOpTime = writable(0);
 
 const VERSION = '4.3.0';
 
@@ -1608,6 +1609,7 @@ export default class AudioMotionAnalyzer {
 	 * this is called 60 times per second by requestAnimationFrame()
 	 */
 	_draw( timestamp ) {
+		let drawTime = performance.now();
 		// schedule next canvas update
 		this._runId = requestAnimationFrame( timestamp => this._draw( timestamp ) );
 
@@ -2105,6 +2107,8 @@ export default class AudioMotionAnalyzer {
 			this.onCanvasDraw( this, { timestamp, _canvasGradients } );
 			_ctx.restore();
 		}
+		drawTime = performance.now() - drawTime;
+		drawOpTime.set(drawTime);
 	}
 
 	/**

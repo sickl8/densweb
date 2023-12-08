@@ -9,6 +9,10 @@
 
 // @ts-nocheck
 
+import { writable } from "svelte/store";
+
+export const getOpTime = writable(0);
+
 const VERSION = '4.3.0';
 
 // internal constants
@@ -1992,7 +1996,12 @@ export default class AudioMotionAnalyzer {
 			let fftData = this._fftDataFloat[ channel ];
 			let fftDataInt = this._fftDataInt[ channel ];
 			// this._analyzer[ channel ].getFloatFrequencyData( this._fftDataFloat[channel] );
+			// console.time("getByteFdata");
+			let n = performance.now();
 			this._analyzer[ channel ].getByteFrequencyData( fftDataInt );
+			n = performance.now() - n;
+			getOpTime.set(n);
+			// console.timeEnd("getByteFdata");
 			fftData = new Float32Array([...fftDataInt].map(n => { return (n / 255) * (this.maxDecibels - this.minDecibels) + this.minDecibels }))
 			// console.log({fftData})
 			// console.log({

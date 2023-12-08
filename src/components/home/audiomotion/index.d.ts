@@ -8,6 +8,8 @@ export type CanvasDrawInfo = {
 	canvasGradients: CanvasGradient[]
 }
 
+export const getOpTime: Writable<number>;
+
 export type OnCanvasResizeFunction = (
 	reason: CanvasResizeReason,
 	instance: AudioMotionAnalyzer

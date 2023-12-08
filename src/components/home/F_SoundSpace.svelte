@@ -91,13 +91,12 @@
 			fps = fpsCounter * 2;
 			fpsCounter = 0;
 		}, 500)
-		let frameCounter = 0;
 		setInterval(() => {
-			frameCounter++;
+			requestAnimationFrame(draw);
 		}, 1000 / 60)
 		function draw() {
 			fpsCounter++;
-			requestAnimationFrame(draw)
+			// requestAnimationFrame(draw)
 			// const dpr = Math.max(devicePixelRatio, 1);
 			const dpr = devicePixelRatio;
 			const dim = {w: vizWidth * dpr, h: vizHeight * dpr};
@@ -152,10 +151,10 @@
 			timePerCanvasFrame = performance.now() - timePerCanvasFrame;
 			if (frame < dataArray.length && !isPaused2) {
 				console.log("frame++")
-				frame = frameCounter;
+				frame++;
 			}
 			else {
-				frame = frameCounter = 0;
+				frame = 0;
 				isPaused2 = true;
 			}
 		}

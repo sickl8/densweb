@@ -50,6 +50,7 @@
 	let randomValueFrame = 0;
 	let timePerCanvasFrame = 0;
 	let data: AnalyzerBarData[] = [];
+	let dataArray: AnalyzerBarData[][] = []
 	onMount(() => {
 		let nAudioRenders = 0;
 		let audioStartTime = performance.now();
@@ -70,6 +71,8 @@
 			weightingFilter: "",
 			onCanvasDraw: (instance: AudioMotionAnalyzer) => {
 				data = instance.getBars();
+				if (!isPaused)
+					dataArray.push(JSON.parse(JSON.stringify(data)));
 				randomValueFrame = data[Math.round(Math.random() * (data.length - 1))].value[0];
 				let now = performance.now();
 				audioRendersPs = nAudioRenders / ((now - audioStartTime) / 1000);
@@ -79,6 +82,7 @@
 		let audioMotion = new AudioMotionAnalyzer(undefined, options);
 	})
 	let fps = 0;
+	let frame = 0;
 	onMount(() => {
 		let fpsCounter = 0;
 		let ctx = mainCanvas.getContext("2d")!;
@@ -96,13 +100,16 @@
 			ctx.scale(dpr, dpr);
 			ctx.clearRect(0, 0, dim.w, dim.h);
 			// if (mainCanvas.width !== dim.w)
-				mainCanvas.width = dim.w;
+			mainCanvas.width = dim.w;
 			// if (mainCanvas.height !== dim.h)
-				mainCanvas.height = dim.h;
+			mainCanvas.height = dim.h;
 			timePerCanvasFrame = performance.now();
+			let thisData = dataArray[frame];
+			// console.log({frame, thisData, "dataArray.length": dataArray.length});
+			// try { console.log({thisData0: thisData[0].value[0]})} catch {}
 			for (let i = 0; i < lim; i++) {
-				// try {
-				let bars = data.slice(i * data.length / lim, (i + 1) * data.length / lim);
+				try {
+				let bars = thisData.slice(i * thisData.length / lim, (i + 1) * thisData.length / lim);
 				let barX = [...Array.from(Array(bars.length).keys()), bars.length, bars.length + 1];
 				let barY = [0, ...bars.map(bar => bar.value[0]), 0];
 				let spline = new Spline(barX, barY);
@@ -135,9 +142,17 @@
 				ctx.shadowBlur = 20;
 				ctx.closePath();
 				ctx.fill();
-				// } catch {}
+				} catch {}
 			}
 			timePerCanvasFrame = performance.now() - timePerCanvasFrame;
+			if (frame < dataArray.length && !isPaused2) {
+				console.log("frame++")
+				frame++;
+			}
+			else {
+				frame = 0;
+				isPaused2 = true;
+			}
 		}
 		draw();
 	})
@@ -161,12 +176,18 @@
 					timePerCanvasFrame: {timePerCanvasFrame.toFixed(2)}ms<br/>
 					canvasPossibleFramesPs: {(1000 / timePerCanvasFrame).toFixed(2)}<br/>
 					canvasFramesPs: {fps.toFixed(2)}<br/>
+					frame: {frame}<br/>
 				</div>
 				<div class="-player flex gap-2 items-stretch h-24">
 					<audio controls={false} src={path.join(assetsDir, "audio", "den_soundspace.wav")} id="music" bind:this={player} bind:paused={isPaused}></audio>
-					<button class="-playpause w-20 h-20 rounded-full cursor-default self-center" on:click={() => { isPaused = !isPaused;}}>
-						<PausePlayButton class="w-full h-full [&_>*]:cursor-pointer" paused={isPaused}></PausePlayButton>
-					</button>
+					<div class="-buttons flex flex-col">
+						<button class="-playpause w-20 h-20 rounded-full cursor-default self-center" on:click={() => { isPaused = !isPaused;}}>
+							<PausePlayButton class="w-full h-full [&_>*]:cursor-pointer" paused={isPaused}></PausePlayButton>
+						</button>
+						<button class="-playpause w-20 h-20 rounded-full cursor-default self-center" on:click={() => { isPaused2 = !isPaused2;}}>
+							<PausePlayButton class="w-full h-full [&_>*]:cursor-pointer" paused={isPaused2}></PausePlayButton>
+						</button>
+					</div>
 					<div class="-visualizer relative grow" bind:clientWidth={vizWidth} bind:clientHeight={vizHeight}>
 						<canvas class="-vizcanvas absolute top-0 left-0 dim-full [mix-blend-mode:screen]" width="{vizWidth * devicePixelRatio}px" height="{vizHeight * devicePixelRatio}px" style="translate: 0 {vizHeight * 0}px; width: {vizWidth}px; height: {vizHeight}px" bind:this={mainCanvas}></canvas>
 					</div>

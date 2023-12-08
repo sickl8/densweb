@@ -50,7 +50,7 @@
 	let randomValueFrame = 0;
 	let timePerCanvasFrame = 0;
 	let data: AnalyzerBarData[] = [];
-	let dataArray: AnalyzerBarData[][] = []
+	let dataArray: Float32Array[] = []
 	let audioMotion: AudioMotionAnalyzer;
 	onMount(() => {
 		let nAudioRenders = 0;
@@ -73,7 +73,7 @@
 			onCanvasDraw: (instance: AudioMotionAnalyzer) => {
 				data = instance.getBars();
 				if (!isPaused)
-					dataArray.push(JSON.parse(JSON.stringify(data)));
+					dataArray.push(new Float32Array(data.map(d => d.value[0])));
 				randomValueFrame = data[Math.round(Math.random() * (data.length - 1))].value[0];
 				let now = performance.now();
 				audioRendersPs = nAudioRenders / ((now - audioStartTime) / 1000);
@@ -112,7 +112,7 @@
 				try {
 				let bars = thisData.slice(i * thisData.length / lim, (i + 1) * thisData.length / lim);
 				let barX = [...Array.from(Array(bars.length).keys()), bars.length, bars.length + 1];
-				let barY = [0, ...bars.map(bar => bar.value[0]), 0];
+				let barY = [0, ...bars.map(bar => bar), 0];
 				let spline = new Spline(barX, barY);
 				let barSpace = dim.w / (bars.length + 3);
 				let minSideSpacesWidth = 20;
@@ -132,7 +132,7 @@
 				let roundTo = 4;
 				points = points.map(point => { return [roundingFunc(point[0], Math.pow(2, roundTo)), roundingFunc(point[1], Math.pow(2, roundTo))] });
 				// // canvas
-				ctx.globalCompositeOperation = "screen";
+				// ctx.globalCompositeOperation = "screen";
 				ctx.beginPath();
 				ctx.moveTo(...points[0]);
 				points.forEach((point) => {
@@ -140,7 +140,7 @@
 				})
 				ctx.fillStyle = fillStyles[i];
 				ctx.shadowColor = fillStyles[i] + "7F";
-				ctx.shadowBlur = 20;
+				// ctx.shadowBlur = 20;
 				ctx.closePath();
 				ctx.fill();
 				} catch {}
@@ -183,6 +183,12 @@
 					<audio controls={false} src={path.join(assetsDir, "audio", "den_soundspace.wav")} id="music" bind:this={player} bind:paused={isPaused}></audio>
 					<div class="-buttons flex flex-col">
 						<button class="bg-gray-300 text-black text-sm p-2 rounded border border-gray-700" on:click={() => { audioMotion.destroy(); }}>destroy analyser</button>
+						<button class="bg-gray-300 text-black text-sm p-2 rounded border border-gray-700" on:click={() => {
+							let anchor = document.createElement("a");
+							anchor.href = URL.createObjectURL(new Blob(dataArray, {type: 'application/octet-stream'}));
+							anchor.download = 'data.bin'
+							anchor.click();
+						}}>dump data array</button>
 						<button class="-playpause w-20 h-20 rounded-full cursor-default self-center" on:click={() => { isPaused = !isPaused;}}>
 							<PausePlayButton class="w-full h-full [&_>*]:cursor-pointer" paused={isPaused}></PausePlayButton>
 						</button>

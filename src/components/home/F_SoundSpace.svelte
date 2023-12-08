@@ -139,7 +139,7 @@
 				</h3>
 				<div class="-stats">
 					audioRendersPs: {audioRendersPs} <br/>
-					randomValueFrame: {randomValueFrame}
+					randomValueFrame: {randomValueFrame.toFixed(2)}
 				</div>
 				<div class="-player flex gap-2 items-stretch h-24">
 					<audio controls={false} src={path.join(assetsDir, "audio", "den_soundspace.wav")} id="music" bind:this={player} bind:paused={isPaused}></audio>

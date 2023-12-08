@@ -4,7 +4,7 @@
 	import path from "path-browserify";
 	import { assetsDir } from "src/lib/utils";
 	import { onMount } from "svelte";
-	import AudioMotionAnalyzer, { getOpTime, type AnalyzerBarData, type ConstructorOptions, drawOpTime } from "./audiomotion";
+	import AudioMotionAnalyzer, { getOpTime, type AnalyzerBarData, type ConstructorOptions, drawOpTime, audioFrameSet, uniqueAudioFrames, duplicateAudioFrames } from "./audiomotion";
 	import Spline from 'typescript-cubic-spline';
 	import gsap from "gsap-trial";
 	import * as _gsap from "gsap-trial";
@@ -198,6 +198,8 @@
 					frame: {frame}<br/>
 					unique: {unique}<br/>
 					duplicate: {duplicate}<br/>
+					uniqueAudioFrames: {$uniqueAudioFrames}<br/>
+					duplicateAudioFrames: {$duplicateAudioFrames}<br/>
 					getOpTime: {$getOpTime.toFixed(2)}<br/>
 					drawOpTime: {$drawOpTime.toFixed(2)}<br/>
 				</div>
@@ -253,7 +255,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="-right"></div>
+			<div class="-right hidden"></div>
 		</div>
 	</div>
 </section>

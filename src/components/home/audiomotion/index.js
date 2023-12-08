@@ -13,6 +13,9 @@ import { writable } from "svelte/store";
 
 export const getOpTime = writable(0);
 export const drawOpTime = writable(0);
+export let uniqueAudioFrames = writable(0);
+export let duplicateAudioFrames = writable(0);
+export let audioFrameSet = writable(new Set());
 
 const VERSION = '4.3.0';
 
@@ -2001,6 +2004,18 @@ export default class AudioMotionAnalyzer {
 			// console.time("getByteFdata");
 			let n = performance.now();
 			this._analyzer[ channel ].getByteFrequencyData( fftDataInt );
+			let dataString = JSON.stringify([...fftDataInt]);
+			if (fftDataInt.reduce((p,c) =>  p + c, 0) !== 0) {
+				audioFrameSet.update(x => {
+					if (x.has(dataString)) {
+						duplicateAudioFrames.update(xx => xx + 1);
+					}
+					else {
+						uniqueAudioFrames.update(xx => xx + 1);
+					}
+					return x.add(dataString);
+				})
+			}
 			n = performance.now() - n;
 			getOpTime.set(n);
 			// console.timeEnd("getByteFdata");

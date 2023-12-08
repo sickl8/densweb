@@ -10,6 +10,9 @@ export type CanvasDrawInfo = {
 
 export const getOpTime: Writable<number>;
 export const drawOpTime: Writable<number>;
+export let uniqueAudioFrames: Writable<number>;
+export let duplicateAudioFrames: Writable<number>;
+export let audioFrameSet: Writable<Set<string>>;
 
 export type OnCanvasResizeFunction = (
 	reason: CanvasResizeReason,

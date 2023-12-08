@@ -51,6 +51,7 @@
 	let timePerCanvasFrame = 0;
 	let data: AnalyzerBarData[] = [];
 	let dataArray: AnalyzerBarData[][] = []
+	let audioMotion: AudioMotionAnalyzer;
 	onMount(() => {
 		let nAudioRenders = 0;
 		let audioStartTime = performance.now();
@@ -79,7 +80,7 @@
 				nAudioRenders++;
 			},
 		}
-		let audioMotion = new AudioMotionAnalyzer(undefined, options);
+		audioMotion = new AudioMotionAnalyzer(undefined, options);
 	})
 	let fps = 0;
 	let frame = 0;
@@ -181,6 +182,7 @@
 				<div class="-player flex gap-2 items-stretch h-24">
 					<audio controls={false} src={path.join(assetsDir, "audio", "den_soundspace.wav")} id="music" bind:this={player} bind:paused={isPaused}></audio>
 					<div class="-buttons flex flex-col">
+						<button class="bg-gray-300 text-black text-sm p-2 rounded border border-gray-700" on:click={() => { audioMotion.destroy(); }}>destroy analyser</button>
 						<button class="-playpause w-20 h-20 rounded-full cursor-default self-center" on:click={() => { isPaused = !isPaused;}}>
 							<PausePlayButton class="w-full h-full [&_>*]:cursor-pointer" paused={isPaused}></PausePlayButton>
 						</button>

@@ -8,6 +8,7 @@
 	import Spline from 'typescript-cubic-spline';
 	import gsap from "gsap-trial";
 	import * as _gsap from "gsap-trial";
+    import { uniq } from "lodash";
 
 	let player: HTMLAudioElement | undefined;
 	let vizRef: HTMLDivElement | undefined;
@@ -86,6 +87,9 @@
 	})
 	let fps = 0;
 	let frame = 0;
+	let unique = 0;
+	let duplicate = 0;
+	let set = new Set<string>();
 	onMount(() => {
 		let fpsCounter = 0;
 		let ctx = mainCanvas.getContext("2d")!;
@@ -111,7 +115,15 @@
 			mainCanvas.height = dim.h;
 			timePerCanvasFrame = performance.now();
 			// let thisData = dataArray[frame];
-			let thisData: number[] = JSON.parse(JSON.stringify(dataClone));
+			let dataString = JSON.stringify(dataClone);
+			if (dataClone.reduce((p, c) => p + c, 0) !== 0) {
+				if (set.has(dataString))
+					duplicate++;
+				else
+					unique++;
+				set.add(dataString);
+			}
+			let thisData: number[] = JSON.parse(dataString);
 			// console.log({frame, thisData, "dataArray.length": dataArray.length});
 			// try { console.log({thisData0: thisData[0].value[0]})} catch {}
 			for (let i = 0; i < lim; i++) {
@@ -184,6 +196,8 @@
 					canvasPossibleFramesPs: {(1000 / timePerCanvasFrame).toFixed(2)}<br/>
 					canvasFramesPs: {fps.toFixed(2)}<br/>
 					frame: {frame}<br/>
+					unique: {unique}<br/>
+					duplicate: {duplicate}<br/>
 				</div>
 				<div class="-player flex gap-2 items-stretch min-h-fit -h-24">
 					<audio controls={false} src={path.join(assetsDir, "audio", "den_soundspace.wav")} id="music" bind:this={player} bind:paused={isPaused}></audio>

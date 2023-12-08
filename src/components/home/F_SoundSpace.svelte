@@ -166,7 +166,7 @@
 		</div>
 		<div class="-blueshade bg-gradient-to-b from-[rgba(0,85,255,0.34)] basis-32"></div>
 		<div class="px-4 w-full self-center max-w-[67.5rem] flex [@media(max-width:600px)]:flex-col gap-12 grow [&_>*]:grow [&_>*]:basis-0">
-			<div class="-left flex flex-col gap-8 font-light">
+			<div class="-left flex flex-col gap-8 font-light h-fit">
 				<DashTitle words={["sound", "space"]} class="max-w-[67.5rem] --max-w-5xl --max-w-[80%] self-center"/>
 				<h3 class="-desc">
 					Our in-house sound team will provide you with the best sonic experience.
@@ -181,7 +181,7 @@
 				</div>
 				<div class="-player flex gap-2 items-stretch h-24">
 					<audio controls={false} src={path.join(assetsDir, "audio", "den_soundspace.wav")} id="music" bind:this={player} bind:paused={isPaused}></audio>
-					<div class="-buttons flex flex-col">
+					<div class="-buttons flex flex-col h-fit">
 						<button class="bg-gray-300 text-black text-sm p-2 rounded border border-gray-700" on:click={() => { audioMotion.destroy(); }}>destroy analyser</button>
 						<button class="bg-gray-300 text-black text-sm p-2 rounded border border-gray-700" on:click={() => {
 							let anchor = document.createElement("a");
@@ -189,10 +189,10 @@
 							anchor.download = 'data.bin'
 							anchor.click();
 						}}>dump data array</button>
-						<button class="-playpause w-20 h-20 rounded-full cursor-default self-center" on:click={() => { isPaused = !isPaused;}}>
+						<button class="-playpause w-20 h-20 basis-20 rounded-full cursor-default self-center" on:click={() => { isPaused = !isPaused;}}>
 							<PausePlayButton class="w-full h-full [&_>*]:cursor-pointer" paused={isPaused}></PausePlayButton>
 						</button>
-						<button class="-playpause w-20 h-20 rounded-full cursor-default self-center" on:click={() => { isPaused2 = !isPaused2;}}>
+						<button class="-playpause w-20 h-20 basis-20 rounded-full cursor-default self-center" on:click={() => { isPaused2 = !isPaused2;}}>
 							<PausePlayButton class="w-full h-full [&_>*]:cursor-pointer" paused={isPaused2}></PausePlayButton>
 						</button>
 					</div>

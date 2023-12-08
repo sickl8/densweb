@@ -91,6 +91,10 @@
 			fps = fpsCounter * 2;
 			fpsCounter = 0;
 		}, 500)
+		let frameCounter = 0;
+		setInterval(() => {
+			frameCounter++;
+		}, 1000 / 60)
 		function draw() {
 			fpsCounter++;
 			requestAnimationFrame(draw)
@@ -148,10 +152,10 @@
 			timePerCanvasFrame = performance.now() - timePerCanvasFrame;
 			if (frame < dataArray.length && !isPaused2) {
 				console.log("frame++")
-				frame++;
+				frame = frameCounter;
 			}
 			else {
-				frame = 0;
+				frame = frameCounter = 0;
 				isPaused2 = true;
 			}
 		}

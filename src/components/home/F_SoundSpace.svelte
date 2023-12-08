@@ -78,8 +78,15 @@
 		}
 		let audioMotion = new AudioMotionAnalyzer(undefined, options);
 	})
+	let fps = 0;
 	onMount(() => {
+		let fpsCounter = 0;
 		let ctx = mainCanvas.getContext("2d")!;
+		setInterval(() => {
+			fps = fpsCounter * 2;
+			fpsCounter = 0;
+
+		}, 500)
 		function draw() {
 			requestAnimationFrame(draw)
 			// const dpr = Math.max(devicePixelRatio, 1);
@@ -88,11 +95,13 @@
 			ctx.resetTransform();
 			ctx.scale(dpr, dpr);
 			ctx.clearRect(0, 0, dim.w, dim.h);
-			mainCanvas.width = dim.w;
-			mainCanvas.height = dim.h;
+			if (mainCanvas.width !== dim.w)
+				mainCanvas.width = dim.w;
+			if (mainCanvas.height !== dim.h)
+				mainCanvas.height = dim.h;
 			timePerCanvasFrame = performance.now();
 			for (let i = 0; i < lim; i++) {
-				try {
+				// try {
 				let bars = data.slice(i * data.length / lim, (i + 1) * data.length / lim);
 				let barX = [...Array.from(Array(bars.length).keys()), bars.length, bars.length + 1];
 				let barY = [0, ...bars.map(bar => bar.value[0]), 0];
@@ -126,7 +135,7 @@
 				ctx.shadowBlur = 20;
 				ctx.closePath();
 				ctx.fill();
-				} catch {}
+				// } catch {}
 			}
 			timePerCanvasFrame = performance.now() - timePerCanvasFrame;
 		}

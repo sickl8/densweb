@@ -52,36 +52,36 @@
 	let data: AnalyzerBarData[] = [];
 	let dataArray: Float32Array[] = []
 	let audioMotion: AudioMotionAnalyzer;
-	// onMount(() => {
-	// 	let nAudioRenders = 0;
-	// 	let audioStartTime = performance.now();
-	// 	let options: ConstructorOptions = {
-	// 		source: player,
-	// 		connectSpeakers: true,
-	// 		frequencyScale: "linear",
-	// 		maxDecibels: vizData[0].maxDec,
-	// 		minDecibels: vizData[0].minDec,
-	// 		maxFreq: minFreq + lim * freqStep,
-	// 		minFreq: minFreq,
-	// 		mode: 10,
-	// 		// fftSize: Math.pow(2, 10),
-	// 		onCanvasResize: undefined,
-	// 		smoothing: 0.8,
-	// 		useCanvas: false,
-	// 		volume: 1,
-	// 		weightingFilter: "",
-	// 		onCanvasDraw: (instance: AudioMotionAnalyzer) => {
-	// 			data = instance.getBars();
-	// 			if (!isPaused)
-	// 				dataArray.push(new Float32Array(data.map(d => d.value[0])));
-	// 			randomValueFrame = data[Math.round(Math.random() * (data.length - 1))].value[0];
-	// 			let now = performance.now();
-	// 			audioRendersPs = nAudioRenders / ((now - audioStartTime) / 1000);
-	// 			nAudioRenders++;
-	// 		},
-	// 	}
-	// 	audioMotion = new AudioMotionAnalyzer(undefined, options);
-	// })
+	onMount(() => {
+		let nAudioRenders = 0;
+		let audioStartTime = performance.now();
+		let options: ConstructorOptions = {
+			source: player,
+			connectSpeakers: true,
+			frequencyScale: "linear",
+			maxDecibels: vizData[0].maxDec,
+			minDecibels: vizData[0].minDec,
+			maxFreq: minFreq + lim * freqStep,
+			minFreq: minFreq,
+			mode: 10,
+			// fftSize: Math.pow(2, 10),
+			onCanvasResize: undefined,
+			smoothing: 0.8,
+			useCanvas: false,
+			volume: 1,
+			weightingFilter: "",
+			onCanvasDraw: (instance: AudioMotionAnalyzer) => {
+				data = instance.getBars();
+				// if (!isPaused)
+				// 	dataArray.push(new Float32Array(data.map(d => d.value[0])));
+				randomValueFrame = data[Math.round(Math.random() * (data.length - 1))].value[0];
+				let now = performance.now();
+				audioRendersPs = nAudioRenders / ((now - audioStartTime) / 1000);
+				nAudioRenders++;
+			},
+		}
+		audioMotion = new AudioMotionAnalyzer(undefined, options);
+	})
 	let fps = 0;
 	let frame = 0;
 	onMount(() => {

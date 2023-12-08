@@ -132,7 +132,7 @@
 				let roundTo = 4;
 				points = points.map(point => { return [roundingFunc(point[0], Math.pow(2, roundTo)), roundingFunc(point[1], Math.pow(2, roundTo))] });
 				// // canvas
-				// ctx.globalCompositeOperation = "screen";
+				ctx.globalCompositeOperation = "screen";
 				ctx.beginPath();
 				ctx.moveTo(...points[0]);
 				points.forEach((point) => {
@@ -140,7 +140,7 @@
 				})
 				ctx.fillStyle = fillStyles[i];
 				ctx.shadowColor = fillStyles[i] + "7F";
-				// ctx.shadowBlur = 20;
+				ctx.shadowBlur = 20;
 				ctx.closePath();
 				ctx.fill();
 				} catch {}

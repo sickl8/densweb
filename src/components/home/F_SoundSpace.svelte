@@ -48,6 +48,7 @@
 	}
 	let audioRendersPs = 0;
 	let randomValueFrame = 0;
+	let timePerCanvasFrame = 0;
 	onMount(() => {
 		let ctx = mainCanvas.getContext("2d")!;
 		let nAudioRenders = 0;
@@ -82,6 +83,7 @@
 				audioRendersPs = nAudioRenders / ((now - audioStartTime) / 1000);
 				nAudioRenders++;
 
+				timePerCanvasFrame = performance.now();
 				for (let i = 0; i < lim; i++) {
 					try {
 					let bars = data.slice(i * data.length / lim, (i + 1) * data.length / lim);
@@ -119,6 +121,7 @@
 					ctx.fill();
 					} catch {}
 				}
+				timePerCanvasFrame = performance.now() - timePerCanvasFrame;
 			},
 		}
 		let audioMotion = new AudioMotionAnalyzer(undefined, options);
@@ -138,8 +141,10 @@
 					Our in-house sound team will provide you with the best sonic experience.
 				</h3>
 				<div class="-stats">
-					audioRendersPs: {audioRendersPs} <br/>
-					randomValueFrame: {randomValueFrame.toFixed(2)}
+					audioRendersPs: {audioRendersPs.toFixed(2)}<br/>
+					randomValueFrame: {randomValueFrame.toFixed(2)}<br/>
+					timePerCanvasFrame: {timePerCanvasFrame.toFixed(2)}ms<br/>
+					canvasFramesPs: {(1000 / timePerCanvasFrame).toFixed(2)}
 				</div>
 				<div class="-player flex gap-2 items-stretch h-24">
 					<audio controls={false} src={path.join(assetsDir, "audio", "den_soundspace.wav")} id="music" bind:this={player} bind:paused={isPaused}></audio>

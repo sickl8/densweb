@@ -4,20 +4,15 @@
 	import path from "path-browserify";
 	import { assetsDir } from "src/lib/utils";
 	import { onMount } from "svelte";
-	import AudioMotionAnalyzer, { getOpTime, type AnalyzerBarData, type ConstructorOptions, drawOpTime, audioFrameSet, uniqueAudioFrames, duplicateAudioFrames } from "./audiomotion";
+	import AudioMotionAnalyzer, { type AnalyzerBarData, type ConstructorOptions } from "audiomotion-analyzer";
 	import Spline from 'typescript-cubic-spline';
-	import gsap from "gsap-trial";
 	import * as _gsap from "gsap-trial";
-    import { uniq } from "lodash";
 
 	let player: HTMLAudioElement | undefined;
-	let vizRef: HTMLDivElement | undefined;
 	let vizWidth: number = 0;
 	let vizHeight: number = 0;
 	let isPaused: boolean = true;
-	let isPaused2: boolean = true;
 	let mainCanvas: HTMLCanvasElement;
-	let polygons: SVGPolygonElement[] = [];
 
 	type VizData = {
 		color: string;
@@ -38,7 +33,8 @@
 		"#34ebc3", // cyan
 		"#344ffc", // blue
 	] as const;
-	let vizData: VizData[] = fillStyles.map(color => ({color, maxDec: -25, minDec: -80}));
+	const maxDec = -25, minDec = -80;
+	let vizData: VizData[] = fillStyles.map(color => ({color, maxDec, minDec}));
 	vizData[VizDataEnum.Blue].maxDec = -40;
 	vizData[VizDataEnum.Green].maxDec = -35;
 	vizData[VizDataEnum.Cyan].maxDec = -30;
@@ -47,26 +43,18 @@
 	function roundingFunc(num: number, by = 4) {
 		return Math.round(num * by) / by;
 	}
-	let audioRendersPs = 0;
-	let randomValueFrame = 0;
-	let timePerCanvasFrame = 0;
 	let data: AnalyzerBarData[] = [];
-	let dataClone: number[] = [];
-	let dataArray: Float32Array[] = []
 	let audioMotion: AudioMotionAnalyzer;
 	onMount(() => {
-		let nAudioRenders = 0;
-		let audioStartTime = performance.now();
 		let options: ConstructorOptions = {
 			source: player,
 			connectSpeakers: true,
 			frequencyScale: "linear",
-			maxDecibels: vizData[0].maxDec,
-			minDecibels: vizData[0].minDec,
+			maxDecibels: maxDec,
+			minDecibels: minDec,
 			maxFreq: minFreq + lim * freqStep,
 			minFreq: minFreq,
 			mode: 10,
-			// fftSize: Math.pow(2, 10),
 			onCanvasResize: undefined,
 			smoothing: 0.8,
 			useCanvas: false,
@@ -74,63 +62,26 @@
 			weightingFilter: "",
 			onCanvasDraw: (instance: AudioMotionAnalyzer) => {
 				data = instance.getBars();
-				dataClone = JSON.parse(JSON.stringify(data.map(d => d.value[0])));
-				// if (!isPaused)
-				// 	dataArray.push(new Float32Array(data.map(d => d.value[0])));
-				randomValueFrame = data[Math.round(Math.random() * (data.length - 1))].value[0];
-				let now = performance.now();
-				audioRendersPs = nAudioRenders / ((now - audioStartTime) / 1000);
-				nAudioRenders++;
 			},
 		}
 		audioMotion = new AudioMotionAnalyzer(undefined, options);
 	})
-	let fps = 0;
-	let frame = 0;
-	let unique = 0;
-	let duplicate = 0;
-	let set = new Set<string>();
 	onMount(() => {
-		let fpsCounter = 0;
 		let ctx = mainCanvas.getContext("2d")!;
-		setInterval(() => {
-			fps = fpsCounter * 2;
-			fpsCounter = 0;
-		}, 500)
-		setInterval(() => {
-		}, 1000 / 60)
 		function draw() {
-			fpsCounter++;
 			requestAnimationFrame(draw);
-			// requestAnimationFrame(draw)
-			// const dpr = Math.max(devicePixelRatio, 1);
 			const dpr = devicePixelRatio;
 			const dim = {w: vizWidth * dpr, h: vizHeight * dpr};
 			ctx.resetTransform();
 			ctx.scale(dpr, dpr);
 			ctx.clearRect(0, 0, dim.w, dim.h);
-			// if (mainCanvas.width !== dim.w)
 			mainCanvas.width = dim.w;
-			// if (mainCanvas.height !== dim.h)
 			mainCanvas.height = dim.h;
-			timePerCanvasFrame = performance.now();
-			// let thisData = dataArray[frame];
-			let dataString = JSON.stringify(dataClone);
-			if (dataClone.reduce((p, c) => p + c, 0) !== 0) {
-				if (set.has(dataString))
-					duplicate++;
-				else
-					unique++;
-				set.add(dataString);
-			}
-			let thisData: number[] = JSON.parse(dataString);
-			// console.log({frame, thisData, "dataArray.length": dataArray.length});
-			// try { console.log({thisData0: thisData[0].value[0]})} catch {}
 			for (let i = 0; i < lim; i++) {
 				try {
-				let bars = thisData.slice(i * thisData.length / lim, (i + 1) * thisData.length / lim);
+				let bars = data.slice(i * data.length / lim, (i + 1) * data.length / lim);
 				let barX = [...Array.from(Array(bars.length).keys()), bars.length, bars.length + 1];
-				let barY = [0, ...bars.map(bar => bar), 0];
+				let barY = [0, ...bars.map(bar => bar.value[0] * ((maxDec - minDec) / (vizData[i].maxDec - vizData[i].minDec))), 0];
 				let spline = new Spline(barX, barY);
 				let barSpace = dim.w / (bars.length + 3);
 				let minSideSpacesWidth = 20;
@@ -163,99 +114,38 @@
 				ctx.fill();
 				} catch {}
 			}
-			timePerCanvasFrame = performance.now() - timePerCanvasFrame;
-			if (frame < dataArray.length && !isPaused2) {
-				console.log("frame++")
-				frame++;
-			}
-			else {
-				frame = 0;
-				isPaused2 = true;
-			}
 		}
 		draw();
 	})
 </script>
 
-<section class="w-full min-h-[calc((100svh-5rem)*2)] flex flex-col items-center justify-start">
+<section class="w-full min-h-[calc((100svh-5rem))] flex flex-col items-center justify-start">
 	<div class="-shell flex flex-col w-full grow">
 		<div class="pb-1.5">
 			<div class="-redribon h-2 bg-torch-red-base"></div>
 		</div>
 		<div class="-blueshade bg-gradient-to-b from-[rgba(0,85,255,0.34)] basis-32"></div>
-		<div class="px-4 w-full self-center max-w-[67.5rem] flex [@media(max-width:600px)]:flex-col gap-12 grow [&_>*]:grow [&_>*]:basis-0">
-			<div class="-left flex flex-col gap-8 font-light h-fit">
+		<div class="px-4 relative w-full self-center max-w-[67.5rem] flex items-center gap-6 h-fit --grow [&_>*]:grow [&_>*]:basis-0">
+			<div class="-left [@media(max-width:855px)]:py-8 flex flex-col gap-8 font-light h-fit">
 				<DashTitle words={["sound", "space"]} class="max-w-[67.5rem] --max-w-5xl --max-w-[80%] self-center"/>
 				<h3 class="-desc">
 					Our in-house sound team will provide you with the best sonic experience.
 				</h3>
-				<div class="-stats">
-					audioRendersPs: {audioRendersPs.toFixed(2)}<br/>
-					randomValueFrame: {randomValueFrame.toFixed(2)}<br/>
-					timePerCanvasFrame: {timePerCanvasFrame.toFixed(2)}ms<br/>
-					canvasPossibleFramesPs: {(1000 / timePerCanvasFrame).toFixed(2)}<br/>
-					canvasFramesPs: {fps.toFixed(2)}<br/>
-					frame: {frame}<br/>
-					unique: {unique}<br/>
-					duplicate: {duplicate}<br/>
-					uniqueAudioFrames: {$uniqueAudioFrames}<br/>
-					duplicateAudioFrames: {$duplicateAudioFrames}<br/>
-					getOpTime: {$getOpTime.toFixed(2)}<br/>
-					drawOpTime: {$drawOpTime.toFixed(2)}<br/>
-				</div>
 				<div class="-player flex gap-2 items-stretch min-h-fit -h-24">
 					<audio controls={false} src={path.join(assetsDir, "audio", "den_soundspace.wav")} id="music" bind:this={player} bind:paused={isPaused}></audio>
-					<div class="-buttons flex flex-col h-fit">
-						<button class="bg-gray-300 text-black text-sm p-2 rounded border border-gray-700" on:click={() => { audioMotion.destroy(); }}>destroy analyser</button>
-						<button class="bg-gray-300 text-black text-sm p-2 rounded border border-gray-700" on:click={() => {
-							let anchor = document.createElement("a");
-							let blobify = [new Float32Array([dataArray.length]), ...dataArray];
-							console.log(blobify);
-							anchor.href = URL.createObjectURL(new Blob(blobify, {type: 'application/octet-stream'}));
-							anchor.download = 'data.bin'
-							anchor.click();
-						}}>dump data array</button>
-						<button class="bg-gray-300 text-black text-sm p-2 rounded border border-gray-700" on:click={() => { isPaused = !isPaused;}}>isPaused: {isPaused}</button>
-						<button class="bg-gray-300 text-black text-sm p-2 rounded border border-gray-700" on:click={() => { isPaused2 = !isPaused2;}}>isPaused2: {isPaused2}</button>
-						<button class="bg-gray-300 text-black text-sm p-2 rounded border border-gray-700" on:click={() => { 
-							fetch(path.join(assetsDir, "audio", "den_soundspace.bin")).then((res) => {
-								return res.blob();
-							}).then((blob) => {
-								console.log(blob);
-								var myReader = new FileReader();
-								//handler executed once reading(blob content referenced to a variable) from blob is finished. 
-								myReader.addEventListener("loadend", function(e){
-									console.log({res: e.target?.result, "typeof": typeof e.target?.result});
-									// @ts-ignore;
-									let raw = new Float32Array(e.target?.result);
-									let data = raw.slice(1);
-									let nFrames = raw[0];
-									let length = data.length / nFrames;
-									// @ts-ignore;
-									console.log({length, nFrames, data})
-									for (let i = 0; i < nFrames; i++) {
-										let slice = data.slice(i * length, (i + 1) * length)
-										dataArray.push(slice);
-									}
-									console.log({dataArray})
-								});
-								//start the reading process.
-								myReader.readAsArrayBuffer(blob);
-							})
-						}}>load den.bin</button>
-						<!-- <button class="-playpause w-20 h-20 basis-20 rounded-full cursor-default self-center" on:click={() => { isPaused = !isPaused;}}>
+					<div class="-buttons flex flex-col h-fit self-center">
+						<button class="-playpause w-20 h-20 basis-20 rounded-full cursor-default" on:click={() => { isPaused = !isPaused;}}>
 							<PausePlayButton class="w-full h-full [&_>*]:cursor-pointer" paused={isPaused}></PausePlayButton>
 						</button>
-						<button class="-playpause w-20 h-20 basis-20 rounded-full cursor-default self-center" on:click={() => { isPaused2 = !isPaused2;}}>
-							<PausePlayButton class="w-full h-full [&_>*]:cursor-pointer" paused={isPaused2}></PausePlayButton>
-						</button> -->
 					</div>
-					<div class="-visualizer relative grow" bind:clientWidth={vizWidth} bind:clientHeight={vizHeight}>
+					<div class="-visualizer relative grow h-32" bind:clientWidth={vizWidth} bind:clientHeight={vizHeight}>
 						<canvas class="-vizcanvas absolute top-0 left-0 dim-full [mix-blend-mode:screen]" width="{vizWidth * devicePixelRatio}px" height="{vizHeight * devicePixelRatio}px" style="translate: 0 {vizHeight * 0}px; width: {vizWidth}px; height: {vizHeight}px" bind:this={mainCanvas}></canvas>
 					</div>
 				</div>
 			</div>
-			<div class="-right hidden"></div>
+			<div class="-right [@media(max-width:855px)]:absolute top-0 left-0 -z-10 [@media(max-width:855px)]:opacity-30">
+				<img src={path.join(assetsDir, "img", "soundspacethumb.jpg")} alt="">
+			</div>
 		</div>
 	</div>
 </section>

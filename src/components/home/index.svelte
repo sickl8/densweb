@@ -7,11 +7,11 @@
 	import FSoundSpace from "./F_SoundSpace.svelte";
 </script>
 
-<!-- <AHero />
+<AHero />
 <BDescription />
 <CCreations />
 <DServices />
-<EAboutUs /> -->
+<EAboutUs />
 <FSoundSpace />
 
 <!-- <Creations bind:work_section={$navElements["Our Work"]}></Creations> -->

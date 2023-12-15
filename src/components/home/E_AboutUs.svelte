@@ -1,5 +1,7 @@
 <script lang="ts">
+    import path from "path-browserify";
     import DashTitle from "../DashTitle.svelte";
+    import { assetsDir } from "$lib/utils";
 
 
 </script>
@@ -30,7 +32,7 @@
 					<div class="-plus self-start relative z-10 basis-0 grow-0 text-5xl font-bold text-white">
 						<div class="w-[0.5ch] h-0 leading-[0]">+</div>
 					</div>
-					<img class="-img relative h-full" src="/assets/img/double_u.png" alt="">
+					<img class="-img relative h-full" src={path.join(assetsDir, "img", "double_u.png")} alt="">
 					<div class="-plus self-end relative z-10 basis-0 grow-0 text-5xl font-bold text-torch-red-base">
 						<div class="w-[0.5ch] h-0 leading-[0]" dir="rtl">+</div>
 					</div>

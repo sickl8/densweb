@@ -119,7 +119,7 @@
 	})
 </script>
 
-<section class="w-full min-h-[calc((100svh-5rem))] flex flex-col items-center justify-start">
+<section class="w-full min-h-[calc(100svh-5rem)] mt-[5rem] flex flex-col items-center justify-start">
 	<div class="-shell flex flex-col w-full grow">
 		<div class="pb-1.5">
 			<div class="-redribon h-2 bg-torch-red-base"></div>
@@ -143,7 +143,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="-right [@media(max-width:855px)]:absolute top-0 left-0 -z-10 [@media(max-width:855px)]:opacity-30">
+			<div class="-right [@media(max-width:855px)]:absolute [@media(max-width:690px)]:hidden top-0 left-0 -z-10 [@media(max-width:855px)]:opacity-30">
 				<img src={path.join(assetsDir, "img", "soundspacethumb.jpg")} alt="">
 			</div>
 		</div>

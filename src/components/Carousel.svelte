@@ -116,4 +116,12 @@
 				transparent				calc(100% - var(--mskshade))
 			);
 	}
+	@media (max-width:610px) {
+		:global(.__mask-image) {
+			mask-image: none;
+		}
+		.-carousel {
+			transform: scale(.8);
+		}
+	}
 </style>

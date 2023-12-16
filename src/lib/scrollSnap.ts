@@ -149,7 +149,7 @@
 // 	let carouselElements: HTMLElement[] = [];
 // </script>
 
-// <section class="w-full min-h-[calc(100svh-5rem)] flex flex-col items-center justify-start">
+// <section class="w-full min-h-[calc(100svh-5rem)] mt-[5rem] flex flex-col items-center justify-start">
 // 	<div class="flex flex-col w-full gap-12 items-center">
 // 		<DashTitle words={["Our", "Creations"]} class="px-2 max-w-[67.5rem] --max-w-5xl --max-w-[80%] self-center"/>
 // 		<div class="-wrapper -carousel relative overflow-x-scroll max-w-7xl w-full"

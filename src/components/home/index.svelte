@@ -5,6 +5,7 @@
 	import DServices from "./D_Services.svelte";
 	import EAboutUs from "./E_AboutUs.svelte";
 	import FSoundSpace from "./F_SoundSpace.svelte";
+    import GContactUs from "./G_ContactUs.svelte";
 </script>
 
 <AHero />
@@ -13,6 +14,7 @@
 <DServices />
 <EAboutUs />
 <FSoundSpace />
+<GContactUs />
 
 <!-- <Creations bind:work_section={$navElements["Our Work"]}></Creations> -->
 <!-- <Services bind:services_section={$navElements["Services"]}></Services> -->

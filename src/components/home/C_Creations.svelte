@@ -113,7 +113,7 @@
 
 </script>
 
-<section class="w-full min-h-[calc(100svh-5rem)] flex flex-col items-center justify-start">
+<section class="w-full min-h-[calc(100svh-5rem)] mt-[5rem] flex flex-col items-center justify-start">
 	<div class="flex flex-col w-full gap-12 items-center">
 		<DashTitle words={["Our", "Creations"]} class="px-4 max-w-[67.5rem] --max-w-5xl --max-w-[80%] self-center"/>
 		<Carousel {carouselParts} animateElements={animateElements} {data} component={CreationsCarouselElement} options={{scrollAmount: remsToPixels(16)}}/>

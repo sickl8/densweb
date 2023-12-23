@@ -27,6 +27,6 @@
 
 <style lang="postcss">
 	.stroke {
-		-webkit-text-stroke: 2px white;
+		-webkit-text-stroke: 0.20vw white;
 	}
 </style>

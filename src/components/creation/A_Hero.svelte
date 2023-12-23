@@ -5,7 +5,7 @@
 	export let creation: CreationData;
 </script>
 
-<section class="relative overflow-visible w-full min-h-[calc(100svh)] flex flex-col items-center justify-center" id="home">
+<section class="relative overflow-visible w-full min-h-[calc(100svh-5rem)] flex flex-col items-center justify-center" id="home">
 	<div class="-top w-full grow">
 
 	</div>

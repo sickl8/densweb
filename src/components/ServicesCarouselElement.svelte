@@ -21,7 +21,7 @@
 
 <li class="-card-container cursor-pointer -items --snap-center " data-scroll-snap-align="center" bind:this={carouselElements[index]}>
 	<div class="--scale-[0.95] bg-black  rounded-xl border border-[#808080] overflow-hidden" style="width: {$serviceCardWidthInRems}rem">
-		<div class="-card h-64 py-6 px-8 flex flex-col gap-4" style="background: linear-gradient(190deg, {colors.white.replace("1)", "10%)")} 0%, {colors.white.replace("1)", "3%)")} 40%)">
+		<div class="-card h-64 [@media(max-width:610px)]:h-96 py-6 px-8 flex flex-col gap-4" style="background: linear-gradient(190deg, {colors.white.replace("1)", "10%)")} 0%, {colors.white.replace("1)", "3%)")} 40%)">
 			<div class="-title flex-shrink flex gap-4 items-center">
 				<div class="icon">
 					<IntersectingCircles class="w-8 h-8"/>

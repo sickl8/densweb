@@ -2,7 +2,7 @@
 	export let data: {
 		url: string;
 		img: string;
-	} = { url: "", img: ""};
+	} = { url: "", img: "" };
 	export let index: number = 0;
 	export let carouselElements: HTMLElement[] = [];
 

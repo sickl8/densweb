@@ -26,6 +26,7 @@
 		xOffsetMiddle: number;
 	}[] = [];
 	function animateElements(carousel: HTMLElement, carouselElements: HTMLElement[], lastCarouselScroll: number) {
+		try {
 		if (!carousel) return;
 		let carouselScroll = carousel.scrollLeft;
 		if (carouselScroll !== lastCarouselScroll) {
@@ -76,6 +77,7 @@
 			})
 			lastCarouselScroll = carouselScroll;
 		}
+		} catch {}
 		requestAnimationFrame(() => { animateElements(carousel, carouselElements, lastCarouselScroll) });
 	}
 
@@ -113,7 +115,7 @@
 
 </script>
 
-<section class="w-full min-h-[calc(100svh-5rem)] mt-[5rem] flex flex-col items-center justify-start">
+<section class="w-full min-h-[calc(100svh)] pt-[5rem] flex flex-col items-center justify-start" id="work">
 	<div class="flex flex-col w-full gap-12 items-center">
 		<DashTitle words={["Our", "Creations"]} class="px-4 max-w-[67.5rem] --max-w-5xl --max-w-[80%] self-center"/>
 		<Carousel {carouselParts} animateElements={animateElements} {data} component={CreationsCarouselElement} options={{scrollAmount: remsToPixels(16)}}/>

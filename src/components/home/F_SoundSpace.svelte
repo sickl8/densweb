@@ -2,8 +2,8 @@
 	import DashTitle from "../DashTitle.svelte";
 	import PausePlayButton from "../PausePlayButton.svelte";
 	import path from "path-browserify";
-	import { assetsDir } from "src/lib/utils";
-	import { onMount } from "svelte";
+	import { assetsDir, roundingFunc } from "src/lib/utils";
+	import { onDestroy, onMount } from "svelte";
 	import AudioMotionAnalyzer, { type AnalyzerBarData, type ConstructorOptions } from "audiomotion-analyzer";
 	import Spline from 'typescript-cubic-spline';
 	import * as _gsap from "gsap-trial";
@@ -40,9 +40,6 @@
 	vizData[VizDataEnum.Cyan].maxDec = -30;
 	const lim = 5;
 	const minFreq = 1000, maxFreq = 2000, freqStep = 128, useStep = true;
-	function roundingFunc(num: number, by = 4) {
-		return Math.round(num * by) / by;
-	}
 	let data: AnalyzerBarData[] = [];
 	let audioMotion: AudioMotionAnalyzer;
 	onMount(() => {
@@ -66,10 +63,11 @@
 		}
 		audioMotion = new AudioMotionAnalyzer(undefined, options);
 	})
+	let tid = -1;
 	onMount(() => {
 		let ctx = mainCanvas.getContext("2d")!;
 		function draw() {
-			requestAnimationFrame(draw);
+			tid = requestAnimationFrame(draw);
 			const dpr = devicePixelRatio;
 			const dim = {w: vizWidth * dpr, h: vizHeight * dpr};
 			ctx.resetTransform();
@@ -117,9 +115,13 @@
 		}
 		draw();
 	})
+	onDestroy(() => {
+		audioMotion.destroy();
+		cancelAnimationFrame(tid);
+	})
 </script>
 
-<section class="w-full min-h-[calc(100svh-5rem)] mt-[5rem] flex flex-col items-center justify-start">
+<section class="w-full min-h-[calc(100svh)] pt-[5rem] flex flex-col items-center justify-start">
 	<div class="-shell flex flex-col w-full grow">
 		<div class="pb-1.5">
 			<div class="-redribon h-2 bg-torch-red-base"></div>

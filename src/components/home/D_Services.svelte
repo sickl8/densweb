@@ -57,7 +57,7 @@
 		if (!carousel) return;
 		let carouselScroll = carousel.scrollLeft;
 		if (carouselScroll !== lastCarouselScroll) {
-			console.log({carousel, carouselElements});
+			// console.log({carousel, carouselElements});
 			visibleElements = carouselElements.filter(el => {
 				let offsetFromParentVP = el.offsetLeft - carouselScroll;
 				return (offsetFromParentVP + 1 < carousel.offsetWidth && offsetFromParentVP + el.offsetWidth > 1);
@@ -117,9 +117,19 @@
 			}
 		})
 	})
+	let width = 0;
+	$: {
+		console.log({width})
+		if (width < 610) {
+			$serviceCardWidthInRems = 18
+		}
+		else {
+			$serviceCardWidthInRems = 30
+		}
+	}
 </script>
 
-<section class="w-full min-h-[calc(100svh-5rem)] mt-[5rem] flex flex-col items-center justify-start">
+<section class="w-full min-h-[calc(100svh)] pt-[5rem] flex flex-col items-center justify-start" bind:clientWidth={width} id="services">
 <div class="flex flex-col w-full gap-12 items-center">
 	<DashTitle words={["Our", "Services"]} class="px-4 max-w-[67.5rem] --max-w-5xl --max-w-[80%] self-center"/>
 	<Carousel class="[--msk-shade:15%] [--msk-transparent:10%]" maskImageElementIndex={1} {carouselParts} animateElements={animateElements} {data} component={ServicesCarouselElement} maxItemsVisible={3} options={{scrollAmount: remsToPixels($serviceCardWidthInRems), ease: "power2.inOut", duration: 1}}/>

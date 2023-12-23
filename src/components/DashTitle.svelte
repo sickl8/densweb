@@ -8,7 +8,7 @@
 <div class="{twMerge("flex flex-col w-full", Class)}">
 	<div class="flex items-center gap-2.5">
 		<div class="w-10 h-1 bg-torch-red-base"></div>
-		<div class="select-none font-normal text-xl">{words[0]}</div>
+		<div class="select-none font-normal text-xl h-[1lh]">{words[0]}</div>
 	</div>
 	<div class="select-none font-medium text-5xl">{words[1]}</div>
 </div>

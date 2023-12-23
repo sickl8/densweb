@@ -3,10 +3,10 @@ import { writable } from "svelte/store";
 
 export let sideBarIsOn = writable(false);
 export let navData = writable([
-	{ text: "Our Work", path: "/", selector: "#work" },
-	{ text: "Services", path: "/", selector: "#services" },
-	{ text: "About Us", path: "/", selector: "#about" },
-	{ text: "Contact Us", path: "/", selector: "#contact" },
+	{ text: "Our Work", path: "/", hash: "#work" },
+	{ text: "Services", path: "/", hash: "#services" },
+	{ text: "About Us", path: "/", hash: "#about" },
+	{ text: "Contact Us", path: "/", hash: "#contact" },
 ]);
 export let scrollVelocity = writable(0);
 export let windowSmoothScroll = writable<Lenis>();

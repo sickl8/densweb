@@ -6,7 +6,7 @@
 
 </script>
 
-<section class="w-full min-h-[calc(100svh-5rem)] mt-[5rem] flex flex-col items-center justify-start">
+<section class="w-full min-h-[calc(100svh)] pt-[5rem] flex flex-col items-center justify-start" id="about">
 	<div class="px-4 flex flex-col w-full gap-12 items-center">
 		<DashTitle words={["", "about us"]} class="max-w-[67.5rem] --max-w-5xl --max-w-[80%] self-center"/>
 		<div class="-container relative max-w-[67.5rem] flex gap-4 [@media(max-width:900px)]:block [&>_*]:basis-0 [&>_*]:grow ">

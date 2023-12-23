@@ -7,6 +7,7 @@
 	import TextPlugin from "gsap-trial/TextPlugin";
 	import { colors } from "$lib/tailwind";
 	import { times } from "lodash";
+    import Anchor from "../Anchor.svelte";
 
 	gsap.registerPlugin(TextPlugin);
 
@@ -49,7 +50,7 @@
 	}
 </script>
 
-<section class="relative px-4 overflow-visible w-full min-h-[calc(100svh-5rem)] mt-[5rem] flex flex-col items-center justify-center">
+<section class="relative px-4 overflow-visible w-full min-h-[calc(100svh)] flex flex-col items-center justify-center" id="home">
 	<LogoWireframe class="text-neutral-500/50 absolute left-[50%] top-[-15%] h-[150%] -z-10"/>
 	<div class="-container w-full max-w-5xl h-full flex flex-col justify-center items-center gap-12">
 		<div class="-top w-full flex justify-between items-center">
@@ -68,10 +69,10 @@
 					</h2>
 				</div>
 				<div class="-buttons flex items-center gap-2">
-					<button class="-contact border border-torch-red-base hover:bg-torch-red-base hover:text-black [@media(hover:none)]:bg-torch-red-base [@media(hover:none)]:text-black transition-colors px-7 py-3 rounded-full duration-300 ">
+					<Anchor href="/#contact" class="-contact border border-torch-red-base hover:bg-torch-red-base hover:text-black [@media(hover:none)]:bg-torch-red-base [@media(hover:none)]:text-black transition-colors px-7 py-3 rounded-full duration-300 ">
 						Contact&nbsp;Us
-					</button>
-					<button class="-about flex justify-center items-center gap-1 px-8 py-3 rounded-full duration-300 hover:text-black hover:bg-white border border-transparent hover:border-white [@media(hover:none)]:bg-white [@media(hover:none)]:text-black transition-colors"
+					</Anchor>
+					<Anchor href="/#about" class="-about flex justify-center items-center gap-1 px-8 py-3 rounded-full duration-300 hover:text-black hover:bg-white border border-transparent hover:border-white [@media(hover:none)]:bg-white [@media(hover:none)]:text-black transition-colors"
 					on:mouseenter={animateArrow}
 					on:mouseleave={animateArrow}
 					>
@@ -79,7 +80,7 @@
 						<span class="overflow-x-hidden w-12 flex justify-center items-center [@media(max-width:360px)]:hidden">
 							<Arrow class="-nav-about-svg fill-current w-8 h-fit" />
 						</span>
-					</button>
+					</Anchor>
 				</div>
 			</div>
 			<div class="-right" />

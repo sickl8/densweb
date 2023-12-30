@@ -9,7 +9,7 @@
 	<div class="-top w-full grow">
 
 	</div>
-	<div class="-bot w-full grow bg-torch-red-base">
+	<div class="-bot w-full grow bg-torch-red-base scale-y-125 translate-y-[4rem]">
 		
 	</div>
 	<div class="-mid w-min absolute">
@@ -28,5 +28,8 @@
 <style lang="postcss">
 	.stroke {
 		-webkit-text-stroke: 0.20vw white;
+	}
+	.-bot {
+		mask-image: linear-gradient(to bottom, black, black, black, transparent);
 	}
 </style>

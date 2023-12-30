@@ -1,3 +1,4 @@
+import creationJson from "src/routes/creations/creations.json"
 
 export const assetsDir = "/assets";
 
@@ -9,16 +10,17 @@ export function roundingFunc(num: number, by = 4) {
 	return Math.round(num * by) / by;
 }
 
-export type CreationData = {
-	name: string
-	display_name: string
-	img: string
-	hero_img: string;
-	about_the_project: string;
-	about_img: string;
-	sm_left_img: string;
-	sm_middle_img: string;
-	sm_right_img: string;
-	banner_img: string;
-	misc: string[];
-}
+export type CreationData = typeof creationJson[number];
+// {
+// 	name: string
+// 	display_name: string
+// 	img: string
+// 	hero_img: string;
+// 	about_the_project: string;
+// 	about_img: string;
+// 	sm_left_img: string;
+// 	sm_middle_img: string;
+// 	sm_right_img: string;
+// 	banner_img: string;
+// 	misc: string[];
+// }

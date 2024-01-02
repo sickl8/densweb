@@ -1,0 +1,45 @@
+[
+	{
+		"domain": "Development",
+		"skills": [
+			"Web Development",
+			"Desktop Apps",
+			"Automation",
+			"Backend Development",
+			"Frontend Development",
+			"UI/UX",
+			"Low Level Development",
+			"WordPress"
+		]
+	},
+	{
+		"domain": "Audio",
+		"skills": [
+			"Music Production",
+			"Sound Design",
+			"Mixing & Mastering",
+			"ADR (Automated Dialogue Replacement)",
+			"Audio Editing"
+		]
+	},
+	{
+		"domain": "Visuals",
+		"skills": [
+			"Storyboarding",
+			"Illustrations",
+			"Character Design",
+			"Concept Art",
+			"2D animations",
+			"Digital Art",
+			"Graphic desing",
+			"Motion graphic"
+		]
+	},
+	{
+		"domain": "Management",
+		"skills": [
+			"Content Writing",
+			"Translation"
+		]
+	}
+]

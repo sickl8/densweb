@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { serviceCardWidthInRems } from "$lib/stores";
+    import { serviceCardWidthInRems, serviceCardWidthInRemsDefault } from "$lib/stores";
     import { remsToPixels } from "$lib/utils";
     import Carousel from "../Carousel.svelte";
     import DashTitle from "../DashTitle.svelte";
@@ -9,45 +9,47 @@
     import { onMount } from "svelte";
     import type { SmoothScroll } from "$lib/smoothScrollTo";
 	type Service = { domain: string; skills: string[] };
+	import servicesJson from "./services.json";
 
-	let _services: Service[] = [
-		{
-			domain: "visuals",
-			skills: [
-				"branding",
-				"2D animation",
-				"3D animation",
-				"motion design",
-				"video editing",
-				"character design",
-				"3D modeling",
-			],
-		},
-		{
-			domain: "sound",
-			skills: [
-				"branding",
-				"2D animation",
-				"3D animation",
-				"motion design",
-				"video editing",
-				"character design",
-				"3D modeling",
-			],
-		},
-		{
-			domain: "video0",
-			skills: [
-				"branding",
-				"2D animation",
-				"3D animation",
-				"motion design",
-				"video editing",
-				"character design",
-				"3D modeling",
-			],
-		},
-	];
+	let _services: Service[] = servicesJson;
+	// [
+	// 	{
+	// 		domain: "visuals",
+	// 		skills: [
+	// 			"branding",
+	// 			"2D animation",
+	// 			"3D animation",
+	// 			"motion design",
+	// 			"video editing",
+	// 			"character design",
+	// 			"3D modeling",
+	// 		],
+	// 	},
+	// 	{
+	// 		domain: "sound",
+	// 		skills: [
+	// 			"branding",
+	// 			"2D animation",
+	// 			"3D animation",
+	// 			"motion design",
+	// 			"video editing",
+	// 			"character design",
+	// 			"3D modeling",
+	// 		],
+	// 	},
+	// 	{
+	// 		domain: "video0",
+	// 		skills: [
+	// 			"branding",
+	// 			"2D animation",
+	// 			"3D animation",
+	// 			"motion design",
+	// 			"video editing",
+	// 			"character design",
+	// 			"3D modeling",
+	// 		],
+	// 	},
+	// ];
 
 	let data = _services;
 
@@ -124,7 +126,7 @@
 			$serviceCardWidthInRems = 18
 		}
 		else {
-			$serviceCardWidthInRems = 30
+			$serviceCardWidthInRems = serviceCardWidthInRemsDefault;
 		}
 	}
 </script>
